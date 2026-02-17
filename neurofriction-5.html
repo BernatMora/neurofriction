@@ -1,0 +1,2505 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>NeuroFriction v5 · Mode Flipar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#050608" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="NeuroFriction" />
+  <meta name="description" content="NeuroFriction: Entrenament cognitiu avançat amb binaural beats i reptes intel·ligents" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+    :root {
+      color-scheme: dark;
+      --bg-1: #050608;
+      --bg-2: #0c1217;
+      --bg-3: #121b1f;
+      --ink-1: #f8fafc;
+      --ink-2: rgba(248, 250, 252, 0.74);
+      --ink-3: rgba(248, 250, 252, 0.54);
+      --acid: #37f3c0;
+      --electric: #f3ff4b;
+      --lava: #ff8a5b;
+      --shadow: rgba(0, 0, 0, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Space Grotesk', sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(55, 243, 192, 0.12), transparent 55%),
+        radial-gradient(circle at 20% 40%, rgba(255, 138, 91, 0.08), transparent 50%),
+        linear-gradient(160deg, var(--bg-1), var(--bg-2) 55%, var(--bg-3) 100%);
+      color: var(--ink-1);
+      padding: 2.5rem 1.6rem 4rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+      background-size: 120px 120px;
+      opacity: 0.35;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    .app {
+      max-width: 980px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero {
+      display: grid;
+      gap: 1.2rem;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--acid);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+    }
+
+    p {
+      opacity: 0.85;
+      max-width: 780px;
+    }
+
+    .panel {
+      background: rgba(8, 12, 14, 0.86);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 1.8rem;
+      margin-top: 2rem;
+      box-shadow: 0 25px 60px var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .section {
+      margin-top: 1.5rem;
+      padding: 1.2rem;
+      border-radius: 18px;
+      background: rgba(5, 8, 10, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .section h3 {
+      margin: 0 0 0.8rem 0;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--electric);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 600;
+      color: var(--ink-2);
+    }
+
+    input, select, button, textarea {
+      width: 100%;
+      margin-top: 0.4rem;
+      padding: 0.7rem 0.9rem;
+      border-radius: 12px;
+      border: none;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+
+    input, select, textarea {
+      background: rgba(15, 20, 24, 0.9);
+      color: var(--ink-1);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    input[type="range"] {
+      padding: 0.2rem 0.6rem;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+
+    button {
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 0.6rem;
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--acid), var(--electric));
+      color: #050608;
+      box-shadow: 0 18px 35px rgba(55, 243, 192, 0.25);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--ink-1);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .status {
+      margin-top: 1rem;
+      font-weight: 600;
+      color: var(--acid);
+    }
+
+    .timer {
+      font-size: 2.6rem;
+      margin-top: 1.2rem;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    .progress {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 0.6rem;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--electric), var(--acid));
+      transition: width 0.3s ease;
+    }
+
+    .field-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .value-chip {
+      background: rgba(255, 255, 255, 0.12);
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      color: var(--ink-2);
+      white-space: nowrap;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 0.8rem;
+      margin-top: 0.8rem;
+    }
+
+    .mode-card {
+      text-align: left;
+      padding: 0.9rem 1rem;
+      border-radius: 14px;
+      background: rgba(15, 20, 24, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--ink-1);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: none;
+    }
+
+    .mode-card.active {
+      border-color: var(--acid);
+      box-shadow: 0 0 0 2px rgba(55, 243, 192, 0.18);
+    }
+
+    .mode-description {
+      margin-top: 0.8rem;
+      color: var(--ink-2);
+      font-size: 0.95rem;
+    }
+
+    .feed {
+      display: grid;
+      gap: 0.6rem;
+      max-height: 220px;
+      overflow-y: auto;
+      padding-right: 0.3rem;
+    }
+
+    .feed-item {
+      padding: 0.7rem 0.9rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      animation: slideIn 0.45s ease;
+    }
+
+    .feed-item.system {
+      border-left: 3px solid var(--acid);
+    }
+
+    .feed-item.provoke {
+      border-left: 3px solid var(--lava);
+    }
+
+    .feed-item.hint {
+      border-left: 3px solid var(--electric);
+    }
+
+    .report-panel {
+      display: none;
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 16px;
+      background: rgba(15, 20, 24, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .report-panel.active {
+      display: block;
+    }
+
+    .report-list {
+      display: grid;
+      gap: 0.5rem;
+      margin: 0.8rem 0;
+    }
+
+    .key-line {
+      font-weight: 700;
+      color: var(--electric);
+    }
+
+    .hide {
+      display: none !important;
+    }
+
+    .ritual-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 4, 6, 0.95);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      padding: 2rem;
+    }
+
+    .ritual-overlay.active {
+      display: flex;
+    }
+
+    .ritual-card {
+      max-width: 520px;
+      text-align: center;
+      padding: 2rem;
+      border-radius: 20px;
+      background: rgba(10, 12, 15, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
+    }
+
+    .ritual-count {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 2.2rem;
+      margin-top: 1rem;
+      color: var(--acid);
+    }
+
+    footer {
+      margin-top: 3rem;
+      opacity: 0.5;
+      font-size: 0.9rem;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    .challenge-panel {
+      display: none;
+      margin-top: 0.8rem;
+    }
+
+    .challenge-panel.active {
+      display: block;
+    }
+
+    .challenge-question {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.7rem;
+      min-height: 2.2rem;
+      line-height: 1.4;
+    }
+
+    .challenge-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+
+    .challenge-option {
+      padding: 0.55rem 0.7rem;
+      border-radius: 10px;
+      background: rgba(15, 20, 24, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--ink-1);
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      text-transform: none;
+      letter-spacing: 0;
+      font-weight: 500;
+    }
+
+    .challenge-option:hover {
+      border-color: var(--acid);
+      background: rgba(55, 243, 192, 0.08);
+    }
+
+    .challenge-option.correct {
+      border-color: var(--acid);
+      background: rgba(55, 243, 192, 0.18);
+    }
+
+    .challenge-option.wrong {
+      border-color: var(--lava);
+      background: rgba(255, 138, 91, 0.18);
+    }
+
+    .challenge-score {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.6rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.82rem;
+      color: var(--ink-3);
+    }
+
+    .phase-badge {
+      display: inline-block;
+      padding: 0.2rem 0.7rem;
+      border-radius: 999px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+
+    .phase-alpha { background: rgba(55, 243, 192, 0.12); color: var(--acid); }
+    .phase-beta { background: rgba(243, 255, 75, 0.12); color: var(--electric); }
+    .phase-gamma { background: rgba(255, 138, 91, 0.12); color: var(--lava); }
+    .phase-theta { background: rgba(55, 243, 192, 0.08); color: var(--ink-2); }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 0.6rem;
+      margin-top: 0.8rem;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 0.7rem 0.4rem;
+      border-radius: 12px;
+      background: rgba(15, 20, 24, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .stat-value {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--acid);
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      color: var(--ink-3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 0.15rem;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-top: 0.8rem;
+      padding: 0.6rem 0.8rem;
+      border-radius: 12px;
+      background: rgba(15, 20, 24, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .toggle-label {
+      flex: 1;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--ink-2);
+    }
+
+    .toggle-label small {
+      display: block;
+      font-weight: 400;
+      font-size: 0.78rem;
+      color: var(--ink-3);
+      margin-top: 0.15rem;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 48px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+      position: absolute;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.25s;
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      left: 3px;
+      bottom: 3px;
+      background: var(--ink-1);
+      border-radius: 50%;
+      transition: transform 0.25s;
+    }
+
+    .toggle-switch input:checked + .toggle-slider {
+      background: var(--acid);
+    }
+
+    .toggle-switch input:checked + .toggle-slider::before {
+      transform: translateX(22px);
+    }
+
+    /* NEW: Modal overlay for pill editor */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 4, 6, 0.95);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 2rem;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      max-width: 600px;
+      width: 100%;
+      padding: 2rem;
+      border-radius: 20px;
+      background: rgba(10, 12, 15, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
+    }
+
+    .modal-card h2 {
+      margin-top: 0;
+      color: var(--acid);
+    }
+
+    /* NEW: Exploration styles */
+    .explore-card {
+      padding: 1.2rem;
+      border-radius: 14px;
+      background: rgba(15, 20, 24, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      margin-top: 0.8rem;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .explore-card:hover {
+      border-color: var(--acid);
+      background: rgba(55, 243, 192, 0.08);
+    }
+
+    .explore-card.review {
+      border-left: 3px solid var(--electric);
+    }
+
+    .explore-category {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--electric);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.4rem;
+    }
+
+    .explore-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .explore-body {
+      color: var(--ink-2);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .explore-deep {
+      margin-top: 0.8rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--ink-3);
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .explore-connection {
+      margin-top: 0.6rem;
+      padding: 0.5rem 0.7rem;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--acid);
+      font-size: 0.85rem;
+    }
+
+    /* NEW: Dashboard chart */
+    .chart-container {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      height: 120px;
+      gap: 0.3rem;
+      margin-top: 1rem;
+      padding: 0.5rem;
+      border-radius: 10px;
+      background: rgba(15, 20, 24, 0.5);
+    }
+
+    .chart-bar {
+      flex: 1;
+      background: linear-gradient(to top, var(--acid), var(--electric));
+      border-radius: 4px 4px 0 0;
+      min-height: 2px;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+
+    .chart-bar:hover {
+      opacity: 1;
+    }
+
+    /* NEW: Daily challenge banner */
+    .daily-challenge-banner {
+      margin-bottom: 1.5rem;
+      padding: 1.2rem;
+      border-radius: 16px;
+      background: rgba(243, 255, 75, 0.10);
+      border: 1.5px solid var(--electric);
+      box-shadow: 0 4px 24px rgba(243, 255, 75, 0.10);
+    }
+
+    .daily-challenge-banner h3 {
+      margin: 0 0 0.6rem 0;
+      color: var(--electric);
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+    }
+
+    .daily-challenge-text {
+      color: var(--ink-1);
+      font-size: 1.05rem;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 2rem 1.2rem 3.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <!-- NEW: Daily Challenge Banner -->
+    <div class="daily-challenge-banner" id="dailyChallengeBanner">
+      <h3>🌟 REPTE DIARI</h3>
+      <div class="daily-challenge-text" id="dailyChallengeText"></div>
+    </div>
+
+    <section class="panel" style="margin-bottom:2.2rem; background:rgba(55,243,192,0.10); border:1.5px solid var(--acid); box-shadow:0 4px 24px rgba(55,243,192,0.10);">
+      <h2 style="margin-top:0; color:var(--acid); font-size:1.25rem; letter-spacing:0.04em;">Protocol diari recomanat (4 setmanes)</h2>
+      <ol style="margin:0; padding-left:1.2em;">
+        <li><b>Setmana 1</b>:<br>
+          <span style="color:var(--ink-2);">Mode: <b>Sessió viva</b> o <b>Claredat Mental</b> · Intensitat: <b>Baixa</b> · Durada: <b>12-15 min</b> · Nivell: 1<br>Objectiu: Adaptació suau, notar sensacions i consolidar hàbit.</span>
+        </li>
+        <li><b>Setmana 2</b>:<br>
+          <span style="color:var(--ink-2);">Mode: <b>Claredat Mental</b> · Intensitat: <b>Mitja</b> · Durada: <b>15-18 min</b> · Nivell: 1-2<br>Objectiu: Millorar claredat, començar a fer autoavaluació després de cada sessió.</span>
+        </li>
+        <li><b>Setmana 3</b>:<br>
+          <span style="color:var(--ink-2);">Mode: <b>Ment Superior</b> (activa Mode Feina si treballes) · Intensitat: <b>Mitja</b> · Durada: <b>18-22 min</b> · Nivell: 2-3<br>Objectiu: Entrenament cognitiu actiu, començar a notar millores en focus i resposta als reptes.</span>
+        </li>
+        <li><b>Setmana 4</b>:<br>
+          <span style="color:var(--ink-2);">Mode: <b>Ment Superior</b> o <b>Antibiais Brutal</b> (1-2 cops/setmana) · Intensitat: <b>Alta</b> (si et sents preparat) · Durada: <b>20-25 min</b> · Nivell: 3+<br>Objectiu: Optimitzar plasticitat, flexibilitat cognitiva i consolidar resultats.</span>
+        </li>
+      </ol>
+      <ul style="margin:1.1em 0 0 1.2em; color:var(--ink-3); font-size:0.98em;">
+        <li>Fes <b>4-5 sessions/setmana</b> per màxim resultat.</li>
+        <li>Després de cada sessió, espera el ritual de tancament i escriu una idea o sensació.</li>
+        <li>Si tens poc temps, fes <b>Mode Feina</b> mentre treballes (entrenament passiu).</li>
+        <li>Autoavalua't honestament (slider 1-5) per ajustar la intensitat.</li>
+        <li>Si un dia et notes saturat, baixa intensitat o fes una sessió més curta.</li>
+      </ul>
+      <div style="margin-top:0.7em; color:var(--electric); font-size:0.97em;">Recorda: la clau és la <b>consistència</b>, no la perfecció. El progrés és acumulatiu!</div>
+    </section>
+    <header class="hero">
+      <div class="hero-tag">NeuroFriction v5 · Mode Flipar + NeuroExplora</div>
+      <h1>Entra → el sistema et llegeix → et transforma → surts diferent</h1>
+      <p>
+        Sessio viva i mutante: soroll rosa + binaural amb microcanvis, friccio cognitiva emergent i feedback simbolic.
+        No hi ha loops exactes. Hi ha desajust, plasticitat i una mica de provocacio controlada. Ara amb NeuroExplora, spaced repetition i més.
+      </p>
+    </header>
+
+    <section class="panel">
+      <p class="status" style="color:var(--ink-2); font-weight:600;">
+        Avis: aquesta app no substitueix assessorament medic. Manten volum moderat i usa auriculars.
+      </p>
+
+      <div class="section">
+        <h3>Canvi de paradigma</h3>
+        <p style="margin:0; opacity:0.85;">
+          Ja no es "tria una frequencia i un repte". Ara es "entra → el sistema et llegeix → et transforma → surts diferent".
+        </p>
+        <p style="margin:0.7rem 0 0; opacity:0.75;">
+          Regla d'or: <strong>mai loops exactes</strong>. El cervell deixa de predir i s'obre a noves vies.
+        </p>
+      </div>
+
+      <div class="section">
+        <h3>Sessio viva (mutant)</h3>
+        <p style="margin:0; opacity:0.85;">
+          Arquitectura sonora: base de soroll rosa + binaural. Cada 30–60 s hi ha microcanvis de frequencia (±0.13 Hz),
+          microcanvis de fase L/R i respiracio sonora lenta (AM 0.1 Hz).
+        </p>
+      </div>
+
+      <div class="section">
+        <h3>Tria el mode del sistema</h3>
+        <div class="mode-grid" id="modeGrid">
+          <button class="mode-card active" data-mode="viva">Sessio viva</button>
+          <button class="mode-card" data-mode="nocontrol">Mode No-Control</button>
+          <button class="mode-card" data-mode="antibiais">Antibiais Brutal</button>
+          <button class="mode-card" data-mode="insight">Insight Asimetric</button>
+          <button class="mode-card" data-mode="claredat">Claredat Mental</button>
+          <button class="mode-card" data-mode="superior">🧬 Ment Superior</button>
+          <button class="mode-card" data-mode="neuroexplora">🌐 NeuroExplora</button>
+        </div>
+        <div class="mode-description" id="modeDescription"></div>
+      </div>
+
+      <div class="section">
+        <h3>Parametres minims</h3>
+        <label>🎚 Intensitat de friccio</label>
+        <select id="intensity">
+          <option value="low">Baixa · mes suau</option>
+          <option value="mid" selected>Mitja · equilibrada</option>
+          <option value="high">Alta · provocadora</option>
+        </select>
+
+        <div id="durationRow">
+          <label>⏱ Durada (minuts)</label>
+          <input id="duration" type="number" min="5" max="60" value="18" />
+        </div>
+
+        <div id="noControlRow" class="hide">
+          <label>⏳ Finestra de durada (min–max, minuts)</label>
+          <div class="field-row">
+            <input id="minDuration" type="number" min="5" max="20" value="8" />
+            <input id="maxDuration" type="number" min="10" max="30" value="18" />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <label style="margin-top:0;">🔊 Volum</label>
+          <span class="value-chip" id="volumeValue">30%</span>
+        </div>
+        <input id="volume" type="range" min="0" max="0.6" step="0.01" value="0.18" />
+
+        <div class="field-row">
+          <label style="margin-top:0;">🧩 Autoavaluacio (1–5)</label>
+          <span class="value-chip" id="ratingValue">3/5</span>
+        </div>
+        <input id="selfRating" type="range" min="1" max="5" step="1" value="3" />
+      </div>
+
+      <div class="section hide" id="opinionSection">
+        <h3>Antibiais Brutal</h3>
+        <label>🧠 Escriu una opinio que defenses</label>
+        <textarea id="opinionInput" placeholder="Ex: El treball remot baixa la productivitat..."></textarea>
+      </div>
+
+      <!-- NEW: NeuroExplora Section -->
+      <div class="section hide" id="neuroexploraSection">
+        <h3>🌐 NeuroExplora</h3>
+        <label>Estil d'exploració</label>
+        <select id="exploreStyle">
+          <option value="aleatori">Aleatori · Descobreix</option>
+          <option value="progressiu">Progressiu · Creixent</option>
+          <option value="connexions">Connexions · Interdisciplinari</option>
+        </select>
+        <div id="exploreContent" style="margin-top:1rem;"></div>
+      </div>
+
+      <div class="section hide" id="challengeSection">
+        <h3>🧬 Entrenament Cognitiu</h3>
+        <div class="toggle-row" id="workModeRow">
+          <div class="toggle-label">
+            🏗️ Mode Feina
+            <small>Desactiva reptes. La teva feina és el repte cognitiu real.</small>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="workModeToggle" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div id="phaseBadge" class="phase-badge phase-alpha">EN ESPERA</div>
+        <div class="challenge-panel" id="challengePanel">
+          <div class="challenge-question" id="challengeQ"></div>
+          <div class="challenge-options" id="challengeOpts"></div>
+        </div>
+        <div class="challenge-score">
+          <span>Encerts: <strong id="challengeScore">0</strong></span>
+          <span>Nivell: <strong id="challengeLevel">1</strong></span>
+          <span>Ratxa: <strong id="challengeStreak">0</strong></span>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Friccio cognitiva emergent</h3>
+        <div class="feed" id="messageFeed"></div>
+        <div class="status" id="status">Entrada en espera.</div>
+      </div>
+
+      <div class="section">
+        <h3>Controls</h3>
+        <div class="button-row">
+          <button id="startBtn" class="btn-primary">Entrar</button>
+          <button id="pauseBtn" type="button" class="btn-secondary" disabled>Pausa</button>
+          <button id="resumeBtn" type="button" class="btn-secondary" disabled>Retornar</button>
+          <button id="stopBtn" type="button" class="btn-secondary" disabled>Sortida segura</button>
+        </div>
+        <div class="timer" id="timer">00:00</div>
+        <div class="progress" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
+      </div>
+
+      <!-- NEW: Data Management -->
+      <div class="section">
+        <h3>💾 Gestió de dades</h3>
+        <div class="button-row">
+          <button id="exportBtn" class="btn-secondary">Exportar JSON</button>
+          <button id="importBtn" class="btn-secondary">Importar JSON</button>
+          <button id="addPillBtn" class="btn-secondary">➕ Nova Píndola</button>
+          <button id="shareBtn" class="btn-secondary">📤 Compartir</button>
+        </div>
+        <input type="file" id="importFile" accept=".json" />
+      </div>
+
+      <!-- NEW: Progress Dashboard -->
+      <div class="section">
+        <h3>📊 Tauler de progrés</h3>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="dashPillsViewed">0</div>
+            <div class="stat-label">Píndoles vistes</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="dashInsightsSaved">0</div>
+            <div class="stat-label">Insights guardats</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="dashSessionsTotal">0</div>
+            <div class="stat-label">Sessions totals</div>
+          </div>
+        </div>
+        <div style="margin-top:1rem;">
+          <div style="font-size:0.85rem; color:var(--ink-3); margin-bottom:0.5rem;">Activitat últims 14 dies</div>
+          <div class="chart-container" id="activityChart"></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>IA narrativa</h3>
+        <div class="report-panel" id="reportPanel">
+          <div class="report-list" id="reportList"></div>
+          <div class="key-line" id="reportKey"></div>
+        </div>
+      </div>
+
+      <div class="section hide" id="statsSection">
+        <h3>📊 Historial Ment Superior</h3>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="statSessions">0</div>
+            <div class="stat-label">Sessions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statStreak">0</div>
+            <div class="stat-label">Dies seguits</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statLevel">1</div>
+            <div class="stat-label">Nivell</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statBestScore">0</div>
+            <div class="stat-label">Millor puntuació</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      NeuroFriction Lab v5 · prototip experimental · usa auriculars
+    </footer>
+  </main>
+
+  <div class="ritual-overlay" id="ritualOverlay" aria-hidden="true">
+    <div class="ritual-card">
+      <h2 style="margin-top:0;">No tornis immediatament a estimuls</h2>
+      <p style="opacity:0.75;">Respira i deixa que el cervell consolidi el canvi.</p>
+      <div class="ritual-count" id="ritualCountdown">30</div>
+      <button id="ritualClose" class="btn-secondary" disabled>Tancar</button>
+    </div>
+  </div>
+
+  <!-- NEW: Pill Editor Modal -->
+  <div class="modal-overlay" id="pillEditorModal">
+    <div class="modal-card">
+      <h2>✨ Nova Píndola de Coneixement</h2>
+      <label>Categoria</label>
+      <select id="pillCategory">
+        <option value="neurociencia">Neurociència</option>
+        <option value="filosofia">Filosofia</option>
+        <option value="fisica">Física</option>
+        <option value="matematiques">Matemàtiques</option>
+        <option value="psicologia">Psicologia</option>
+        <option value="art">Art</option>
+        <option value="tecnologia">Tecnologia</option>
+        <option value="biologia">Biologia</option>
+        <option value="linguistica">Lingüística</option>
+        <option value="sociologia">Sociologia</option>
+        <option value="economia">Economia</option>
+        <option value="historia">Història</option>
+      </select>
+      <label>Títol</label>
+      <input type="text" id="pillTitle" placeholder="Títol curt i impactant" />
+      <label>Cos principal</label>
+      <textarea id="pillBody" placeholder="Explicació principal del concepte"></textarea>
+      <label>Profunditat (deep)</label>
+      <textarea id="pillDeep" placeholder="Detalls avançats, implicacions"></textarea>
+      <label>Connexió</label>
+      <input type="text" id="pillConnection" placeholder="Com es connecta amb altres idees?" />
+      <div class="button-row">
+        <button id="savePillBtn" class="btn-primary">Desar</button>
+        <button id="cancelPillBtn" class="btn-secondary">Cancel·lar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ═══════════════════════════════════════════════════════════════
+    // CORE VARIABLES
+    // ═══════════════════════════════════════════════════════════════
+    let audioCtx;
+    let leftOsc, rightOsc, noise;
+    let masterGain, breathLfo, breathDepth;
+    let leftDelay, rightDelay, leftPan, rightPan;
+    let timerInterval;
+    let microShiftTimeout;
+    let silenceTimeout;
+    let ritualInterval;
+    let messageTimeouts = [];
+    let isPaused = false;
+    let sessionActive = false;
+    let currentVolume = 0.18;
+    let baseBeat = 8;
+    let totalSessionSeconds = 0;
+    let remainingSessionSeconds = 0;
+    let selectedMode = 'viva';
+    let allowPause = true;
+    let showTimer = true;
+    let workMode = false;
+    const baseFreq = 220;
+
+    // Storage keys
+    const STORAGE_KEY = 'neurofriction_superior_history';
+    const REVIEWS_KEY = 'neurofriction_reviews';
+    const CUSTOM_PILLS_KEY = 'neurofriction_custom_pills';
+    const DISCOVERIES_KEY = 'neurofriction_discoveries';
+
+    // Intensity profiles
+    const intensityProfiles = {
+      low: { beat: 6, dipDepth: 0.2 },
+      mid: { beat: 9, dipDepth: 0.3 },
+      high: { beat: 12, dipDepth: 0.4 }
+    };
+
+    const clarityProfiles = {
+      low:  { alphaHz: 10, betaHz: 14, gammaHz: 38, breathRate: 0.10, gammaLen: 25 },
+      mid:  { alphaHz: 10, betaHz: 16, gammaHz: 40, breathRate: 0.12, gammaLen: 35 },
+      high: { alphaHz: 10, betaHz: 18, gammaHz: 42, breathRate: 0.14, gammaLen: 45 }
+    };
+
+
+    // ═══════════════════════════════════════════════════════════════
+    // CORE UTILITY FUNCTIONS
+    // ═══════════════════════════════════════════════════════════════
+    function clampVolume(value) {
+      return Math.min(0.6, Math.max(0, value));
+    }
+
+    function randomBetween(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function setVolume(value) {
+      currentVolume = clampVolume(value);
+      document.getElementById('volumeValue').innerText = `${Math.round((currentVolume / 0.6) * 100)}%`;
+      if (masterGain && audioCtx && audioCtx.state !== 'closed') {
+        masterGain.gain.setTargetAtTime(currentVolume, audioCtx.currentTime, 0.3);
+      }
+      if (breathDepth && audioCtx && audioCtx.state !== 'closed') {
+        breathDepth.gain.setTargetAtTime(currentVolume * 0.18, audioCtx.currentTime, 0.3);
+      }
+    }
+
+    function setStatus(text) {
+      document.getElementById('status').innerText = text;
+    }
+
+    function pushMessage(text, tone = 'system') {
+      const feed = document.getElementById('messageFeed');
+      const item = document.createElement('div');
+      item.className = `feed-item ${tone}`;
+      item.textContent = text;
+      feed.appendChild(item);
+      feed.scrollTop = feed.scrollHeight;
+    }
+
+    function clearFeed() {
+      const feed = document.getElementById('messageFeed');
+      feed.innerHTML = '';
+    }
+
+    function clearReport() {
+      const panel = document.getElementById('reportPanel');
+      panel.classList.remove('active');
+      document.getElementById('reportList').innerHTML = '';
+      document.getElementById('reportKey').innerText = '';
+    }
+
+    function setMode(mode) {
+      selectedMode = mode;
+      document.querySelectorAll('.mode-card').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mode === mode);
+      });
+      document.getElementById('modeDescription').innerText = modeDescriptions[mode] || '';
+
+      const noControlRow = document.getElementById('noControlRow');
+      const durationRow = document.getElementById('durationRow');
+      const opinionSection = document.getElementById('opinionSection');
+      const neuroexploraSection = document.getElementById('neuroexploraSection');
+
+      noControlRow.classList.toggle('hide', mode !== 'nocontrol');
+      durationRow.classList.toggle('hide', mode === 'nocontrol');
+      opinionSection.classList.toggle('hide', mode !== 'antibiais');
+      neuroexploraSection.classList.toggle('hide', mode !== 'neuroexplora');
+
+      const challengeSection = document.getElementById('challengeSection');
+      const statsSection = document.getElementById('statsSection');
+      if (challengeSection) challengeSection.classList.toggle('hide', mode !== 'superior');
+      if (statsSection) statsSection.classList.toggle('hide', mode !== 'superior');
+      if (mode === 'superior') updateStatsDisplay();
+      if (mode === 'neuroexplora') initNeuroExplora();
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // AUDIO ENGINE
+    // ═══════════════════════════════════════════════════════════════
+    function createPinkNoise(ctx) {
+      const bufferSize = 2048;
+      const node = ctx.createScriptProcessor(bufferSize, 1, 1);
+      let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+      node.onaudioprocess = e => {
+        try {
+          const output = e.outputBuffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            const white = Math.random() * 2 - 1;
+            b0 = 0.99886 * b0 + white * 0.0555179;
+            b1 = 0.99332 * b1 + white * 0.0750759;
+            b2 = 0.96900 * b2 + white * 0.1538520;
+            b3 = 0.86650 * b3 + white * 0.3104856;
+            b4 = 0.55000 * b4 + white * 0.5329522;
+            b5 = -0.7616 * b5 - white * 0.0168980;
+            output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+            output[i] *= 0.11;
+            b6 = white * 0.115926;
+          }
+        } catch (err) {
+          console.error('Pink noise processing error:', err);
+        }
+      };
+      return node;
+    }
+
+    function buildAudioGraph(beatFreq) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume().catch(err => console.error('Failed to resume audio context:', err));
+      }
+
+      leftOsc = audioCtx.createOscillator();
+      rightOsc = audioCtx.createOscillator();
+      leftOsc.type = 'sine';
+      rightOsc.type = 'sine';
+      leftOsc.frequency.value = baseFreq;
+      rightOsc.frequency.value = baseFreq + beatFreq;
+
+      leftDelay = audioCtx.createDelay(0.02);
+      rightDelay = audioCtx.createDelay(0.02);
+      leftDelay.delayTime.value = 0.002;
+      rightDelay.delayTime.value = 0.002;
+
+      leftPan = audioCtx.createStereoPanner();
+      rightPan = audioCtx.createStereoPanner();
+      leftPan.pan.value = -1;
+      rightPan.pan.value = 1;
+
+      noise = createPinkNoise(audioCtx);
+      masterGain = audioCtx.createGain();
+      masterGain.gain.value = currentVolume;
+
+      breathLfo = audioCtx.createOscillator();
+      breathLfo.type = 'sine';
+      breathLfo.frequency.value = 0.1;
+      breathDepth = audioCtx.createGain();
+      breathDepth.gain.value = currentVolume * 0.18;
+
+      leftOsc.connect(leftDelay).connect(leftPan).connect(masterGain);
+      rightOsc.connect(rightDelay).connect(rightPan).connect(masterGain);
+      noise.connect(masterGain);
+      breathLfo.connect(breathDepth).connect(masterGain.gain);
+      masterGain.connect(audioCtx.destination);
+
+      leftOsc.start();
+      rightOsc.start();
+      breathLfo.start();
+    }
+
+    function setBeatFrequency(beatFreq, glide = 1.5) {
+      if (!rightOsc || !audioCtx) return;
+      rightOsc.frequency.setTargetAtTime(baseFreq + beatFreq, audioCtx.currentTime, glide);
+    }
+
+    function scheduleMicroShift() {
+      clearTimeout(microShiftTimeout);
+      microShiftTimeout = setTimeout(() => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
+        const drift = randomBetween(-0.13, 0.13);
+        const nextBeat = Math.max(0.5, baseBeat + drift);
+        setBeatFrequency(nextBeat, 1.2);
+        leftDelay.delayTime.setTargetAtTime(randomBetween(0.0, 0.006), audioCtx.currentTime, 1.2);
+        rightDelay.delayTime.setTargetAtTime(randomBetween(0.0, 0.006), audioCtx.currentTime, 1.2);
+        scheduleMicroShift();
+      }, randomBetween(30, 60) * 1000);
+    }
+
+    function scheduleSilenceDip(depth) {
+      clearTimeout(silenceTimeout);
+      silenceTimeout = setTimeout(() => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
+        const now = audioCtx.currentTime;
+        const dipTarget = Math.max(0.02, currentVolume * (1 - depth));
+        masterGain.gain.cancelScheduledValues(now);
+        masterGain.gain.setTargetAtTime(dipTarget, now, 1.2);
+        masterGain.gain.setTargetAtTime(currentVolume, now + randomBetween(12, 20), 1.5);
+        pushMessage('Silenci actiu: deixa-ho passar.', 'hint');
+        scheduleSilenceDip(depth);
+      }, randomBetween(240, 420) * 1000);
+    }
+
+    function scheduleFrictionCues() {
+      messageTimeouts.forEach(id => clearTimeout(id));
+      messageTimeouts = [];
+      const pushTimeout = (fn, delay) => {
+        const id = setTimeout(fn, delay);
+        messageTimeouts.push(id);
+      };
+
+      pushTimeout(() => pushMessage('No intentis entendre el que ve.', 'system'), 180000);
+      pushTimeout(() => pushMessage("Genera 3 idees. Oblida'n una immediatament.", 'hint'), 270000);
+      pushTimeout(() => pushMessage("Ara canvia d'estrategia.", 'provoke'), 330000);
+
+      const contradictionDelay = randomBetween(240, 360) * 1000;
+      pushTimeout(() => {
+        pushMessage("Concentra't.", 'provoke');
+        pushTimeout(() => pushMessage("Deixa d'intentar-ho.", 'provoke'), 40000);
+      }, contradictionDelay);
+    }
+
+    function scheduleAntibiasFlow() {
+      const burstDelay = randomBetween(120, 180) * 1000;
+      const gammaDuration = randomBetween(30, 60);
+      const silenceDelay = burstDelay + gammaDuration * 1000;
+      const opinionInput = document.getElementById('opinionInput');
+
+      const burstId = setTimeout(() => {
+        baseBeat = 40;
+        setBeatFrequency(baseBeat, 0.6);
+        pushMessage('Gamma breu. Porta la teva opinio al limit.', 'provoke');
+      }, burstDelay);
+
+      const silenceId = setTimeout(() => {
+        pushMessage('Destrueix la teva opinio. Esborra-la ara.', 'provoke');
+        if (opinionInput) opinionInput.value = '';
+        const now = audioCtx.currentTime;
+        masterGain.gain.cancelScheduledValues(now);
+        masterGain.gain.setTargetAtTime(0.02, now, 1.2);
+      }, silenceDelay);
+
+      messageTimeouts.push(burstId, silenceId);
+    }
+
+    function scheduleClarityFlow() {
+      const intensity = document.getElementById('intensity').value;
+      const cp = clarityProfiles[intensity] || clarityProfiles.mid;
+      const totalSec = totalSessionSeconds;
+
+      baseBeat = cp.alphaHz;
+      setBeatFrequency(baseBeat, 2.0);
+      if (breathLfo && audioCtx) {
+        breathLfo.frequency.setTargetAtTime(cp.breathRate, audioCtx.currentTime, 1.0);
+      }
+      pushMessage('Fase Alfa: tanca els ulls, centra l\'atenció en la respiració.', 'system');
+
+      const phase2Start = Math.round(totalSec * 0.25);
+      const phase3Start = Math.round(totalSec * 0.50);
+      const phase4Start = Math.round(totalSec * 0.75);
+
+      const betaId = setTimeout(() => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
+        baseBeat = cp.betaHz;
+        setBeatFrequency(baseBeat, 1.5);
+        pushMessage('Fase Beta: pensament actiu. Visualitza un problema complex.', 'hint');
+      }, phase2Start * 1000);
+
+      const exerciseId1 = setTimeout(() => {
+        pushMessage('Exercici: pensa en 3 coses que NO tenen res en comú... ara troba el fil invisible.', 'provoke');
+      }, (phase2Start + 45) * 1000);
+
+      const gammaId = setTimeout(() => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
+        baseBeat = cp.gammaHz;
+        setBeatFrequency(baseBeat, 0.5);
+        pushMessage('Fase Gamma: integració neuronal. Deixa que les idees es connectin soles.', 'system');
+      }, phase3Start * 1000);
+
+      const exerciseId2 = setTimeout(() => {
+        pushMessage('Exercici: si la teva ment fos un paisatge, quin seria ara?', 'hint');
+      }, (phase3Start + 30) * 1000);
+
+      for (let pulse = 1; pulse <= 3; pulse++) {
+        const pulseTime = phase3Start + pulse * Math.round(cp.gammaLen / 3);
+        const pulseId = setTimeout(() => {
+          if (!audioCtx || audioCtx.state === 'closed') return;
+          const now = audioCtx.currentTime;
+          masterGain.gain.setTargetAtTime(currentVolume * 1.15, now, 0.3);
+          masterGain.gain.setTargetAtTime(currentVolume, now + 2, 0.5);
+        }, pulseTime * 1000);
+        messageTimeouts.push(pulseId);
+      }
+
+      const endGammaId = setTimeout(() => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
+        baseBeat = cp.betaHz;
+        setBeatFrequency(baseBeat, 1.0);
+        pushMessage('Tornant a beta: consolida les connexions.', 'system');
+      }, (phase3Start + cp.gammaLen) * 1000);
+
+      const consolidateId = setTimeout(() => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
+        baseBeat = 8;
+        setBeatFrequency(baseBeat, 2.0);
+        if (breathLfo) {
+          breathLfo.frequency.setTargetAtTime(0.08, audioCtx.currentTime, 1.5);
+        }
+        pushMessage('Fase de consolidació: el cervell integra. No forçis res.', 'hint');
+      }, phase4Start * 1000);
+
+      const exerciseId3 = setTimeout(() => {
+        pushMessage('Exercici final: quina és la idea més clara que tens ara? Reté-la.', 'provoke');
+      }, (phase4Start + 30) * 1000);
+
+      const syncInterval = Math.round(totalSec / 8);
+      for (let i = 1; i <= 7; i++) {
+        const syncId = setTimeout(() => {
+          if (!leftDelay || !rightDelay || !audioCtx || audioCtx.state === 'closed') return;
+          leftDelay.delayTime.setTargetAtTime(randomBetween(0.001, 0.005), audioCtx.currentTime, 0.8);
+          rightDelay.delayTime.setTargetAtTime(randomBetween(0.001, 0.005), audioCtx.currentTime, 0.8);
+        }, i * syncInterval * 1000);
+        messageTimeouts.push(syncId);
+      }
+
+      messageTimeouts.push(betaId, exerciseId1, gammaId, exerciseId2, endGammaId, consolidateId, exerciseId3);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // MENT SUPERIOR — SESSION HISTORY (localStorage)
+    // ═══════════════════════════════════════════════════════════════
+    function loadHistory() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : { sessions: [], currentLevel: 1, streak: 0, lastDate: null };
+      } catch { return { sessions: [], currentLevel: 1, streak: 0, lastDate: null }; }
+    }
+
+    function saveHistory(history) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(history)); } catch {}
+    }
+
+    function recordSession(score, durationMin) {
+      const history = loadHistory();
+      const today = new Date().toISOString().slice(0, 10);
+      history.sessions.push({ date: today, score, duration: durationMin, level: history.currentLevel });
+
+      const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+      if (history.lastDate === yesterday) {
+        history.streak++;
+      } else if (history.lastDate !== today) {
+        history.streak = 1;
+      }
+      history.lastDate = today;
+
+      const levelThreshold = 6 + history.currentLevel * 2;
+      if (history.sessions.length % 5 === 0 || score >= levelThreshold) {
+        history.currentLevel = Math.min(10, history.currentLevel + 1);
+      }
+
+      saveHistory(history);
+      updateStatsDisplay();
+      updateDashboard();
+    }
+
+    function updateStatsDisplay() {
+      const history = loadHistory();
+      const el = (id) => document.getElementById(id);
+      if (el('statSessions')) el('statSessions').innerText = history.sessions.length;
+      if (el('statStreak')) el('statStreak').innerText = history.streak;
+      if (el('statLevel')) el('statLevel').innerText = history.currentLevel;
+      const best = history.sessions.reduce((max, s) => Math.max(max, s.score || 0), 0);
+      if (el('statBestScore')) el('statBestScore').innerText = best;
+      if (el('challengeLevel')) el('challengeLevel').innerText = history.currentLevel;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // MENT SUPERIOR — CHALLENGE ENGINE
+    // ═══════════════════════════════════════════════════════════════
+    let challengeTimer = null;
+    let currentChallengeScore = 0;
+    let currentChallengeStreak = 0;
+    let challengeActive = false;
+
+    const challengeBank = [
+      { type: 'associació', q: 'Quina paraula connecta: LLUM, VELOCITAT, ANY?', answer: 'Llum', options: ['Llum', 'Temps', 'Espai', 'Energia'], level: 1 },
+      { type: 'associació', q: 'Quina paraula connecta: FERRO, VOLUNTAT, CARÀCTER?', answer: 'Fort', options: ['Fort', 'Dur', 'Rígid', 'Metall'], level: 1 },
+      { type: 'associació', q: 'Quina paraula connecta: CAMP, MAGNÈTIC, ELÈCTRIC?', answer: 'Camp', options: ['Camp', 'Força', 'Ona', 'Pol'], level: 1 },
+      { type: 'associació', q: 'Quina paraula connecta: NEGRA, ESTRELLES, FORAT?', answer: 'Nit', options: ['Nit', 'Espai', 'Fosc', 'Univers'], level: 1 },
+      { type: 'associació', q: 'Quina paraula connecta: CADENA, MUNTANYA, ALIMENTÀRIA?', answer: 'Cadena', options: ['Cadena', 'Natura', 'Cicle', 'Roca'], level: 2 },
+      { type: 'associació', q: 'Connecta: PUNT, MORT, CEGO?', answer: 'Punt', options: ['Punt', 'Final', 'Vista', 'Fosc'], level: 2 },
+      { type: 'càlcul', q: '47 + 38 = ?', answer: '85', options: ['85', '83', '87', '75'], level: 1 },
+      { type: 'càlcul', q: '96 - 37 = ?', answer: '59', options: ['59', '57', '63', '61'], level: 1 },
+      { type: 'càlcul', q: '13 × 7 = ?', answer: '91', options: ['91', '87', '93', '89'], level: 1 },
+      { type: 'càlcul', q: '144 ÷ 12 = ?', answer: '12', options: ['12', '14', '11', '13'], level: 1 },
+      { type: 'càlcul', q: '23 × 17 = ?', answer: '391', options: ['391', '381', '401', '371'], level: 2 },
+      { type: 'càlcul', q: '√169 = ?', answer: '13', options: ['13', '11', '12', '14'], level: 2 },
+      { type: 'càlcul', q: '17² = ?', answer: '289', options: ['289', '279', '299', '269'], level: 3 },
+      { type: 'càlcul', q: '7 × 8 + 13 = ?', answer: '69', options: ['69', '67', '71', '63'], level: 2 },
+      { type: 'càlcul', q: '256 + 189 = ?', answer: '445', options: ['445', '435', '455', '425'], level: 2 },
+      { type: 'càlcul', q: '1024 ÷ 16 = ?', answer: '64', options: ['64', '62', '68', '56'], level: 3 },
+      { type: 'patró', q: '2, 6, 18, 54, ?', answer: '162', options: ['162', '108', '156', '180'], level: 1 },
+      { type: 'patró', q: '1, 1, 2, 3, 5, 8, ?', answer: '13', options: ['13', '11', '10', '14'], level: 1 },
+      { type: 'patró', q: '1, 4, 9, 16, 25, ?', answer: '36', options: ['36', '30', '49', '32'], level: 1 },
+      { type: 'patró', q: '3, 7, 15, 31, ?', answer: '63', options: ['63', '47', '62', '59'], level: 2 },
+      { type: 'patró', q: '2, 3, 5, 7, 11, 13, ?', answer: '17', options: ['17', '15', '19', '14'], level: 2 },
+      { type: 'patró', q: '1, 3, 6, 10, 15, ?', answer: '21', options: ['21', '18', '20', '25'], level: 2 },
+      { type: 'patró', q: '0, 1, 1, 2, 3, 5, 8, 13, ?', answer: '21', options: ['21', '18', '20', '26'], level: 3 },
+      { type: 'memòria', q: 'Seqüència: F - K - R - M. Quina era la 2a lletra?', answer: 'K', options: ['K', 'F', 'R', 'M'], level: 1 },
+      { type: 'memòria', q: 'Seqüència: 7 - 3 - 9 - 2 - 5. Quin era el 3r número?', answer: '9', options: ['9', '3', '7', '2'], level: 2 },
+      { type: 'memòria', q: 'BLAU - VERD - ROIG - GROC. Inverteix: quin és el 2n?', answer: 'ROIG', options: ['ROIG', 'GROC', 'VERD', 'BLAU'], level: 2 },
+      { type: 'memòria', q: '8 - 1 - 6 - 4 - 9 - 2. Suma el 1r i l\'últim.', answer: '10', options: ['10', '11', '9', '12'], level: 3 },
+      { type: 'memòria', q: 'P - T - M - B - S. Quina lletra va entre M i S?', answer: 'B', options: ['B', 'T', 'P', 'S'], level: 2 },
+      { type: 'lògica', q: 'Si A > B i B > C, llavors...', answer: 'A > C', options: ['A > C', 'C > A', 'A = C', 'Impossible saber'], level: 1 },
+      { type: 'lògica', q: 'Tots els X són Y. Algun Z és X. Per tant...', answer: 'Algun Z és Y', options: ['Algun Z és Y', 'Tot Z és Y', 'Cap Z és Y', 'Impossible'], level: 2 },
+      { type: 'lògica', q: 'Si plou → carrer mullat. Carrer mullat. Per tant...', answer: 'No es pot concloure', options: ['No es pot concloure', 'Ha plogut', 'No ha plogut', 'Plourà'], level: 2 },
+      { type: 'lògica', q: 'Cap peix no vola. Tot salmó és peix. Per tant...', answer: 'Cap salmó vola', options: ['Cap salmó vola', 'Algun salmó vola', 'No se sap', 'Depèn'], level: 2 },
+      { type: 'lògica', q: 'Si ¬P → Q, i ¬Q. Per tant...', answer: 'P', options: ['P', '¬P', 'Q', 'Impossible'], level: 3 },
+      { type: 'verbal', q: 'Intrús: Taronja, Poma, Pastanaga, Préssec?', answer: 'Pastanaga', options: ['Pastanaga', 'Taronja', 'Poma', 'Préssec'], level: 1 },
+      { type: 'verbal', q: 'Intrús: Piano, Violí, Trompeta, Guitarra?', answer: 'Trompeta', options: ['Trompeta', 'Piano', 'Violí', 'Guitarra'], level: 1 },
+      { type: 'verbal', q: 'Intrús: Mercuri, Venus, Lluna, Mart?', answer: 'Lluna', options: ['Lluna', 'Mercuri', 'Venus', 'Mart'], level: 1 },
+      { type: 'verbal', q: 'CASA : HABITANT :: GÀBIA : ?', answer: 'Ocell', options: ['Ocell', 'Ferro', 'Porta', 'Zoo'], level: 1 },
+      { type: 'verbal', q: 'LLIBRE : PÀGINA :: ARBRE : ?', answer: 'Fulla', options: ['Fulla', 'Tronc', 'Bosc', 'Arrel'], level: 2 },
+      { type: 'verbal', q: 'Intrús: Oxigen, Hidrogen, Aigua, Nitrogen?', answer: 'Aigua', options: ['Aigua', 'Oxigen', 'Hidrogen', 'Nitrogen'], level: 2 },
+      { type: 'espacial', q: '◁ gira 180°. Què veus?', answer: '▷', options: ['▷', '△', '▽', '◁'], level: 1 },
+      { type: 'espacial', q: '↑ gira 90° sentit horari. Resultat?', answer: '→', options: ['→', '←', '↓', '↑'], level: 1 },
+      { type: 'espacial', q: '→ gira 270° sentit horari. Resultat?', answer: '↑', options: ['↑', '↓', '←', '→'], level: 2 },
+      { type: 'espacial', q: '△ reflectit horitzontalment. Resultat?', answer: '△', options: ['△', '▽', '◁', '▷'], level: 2 }
+    ];
+
+    function getAvailableChallenges() {
+      const history = loadHistory();
+      const level = history.currentLevel || 1;
+      return challengeBank.filter(c => !c.level || c.level <= level);
+    }
+
+    function shuffleArray(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function presentChallenge() {
+      if (!challengeActive || !sessionActive) return;
+      const available = getAvailableChallenges();
+      const challenge = available[Math.floor(Math.random() * available.length)];
+      const qEl = document.getElementById('challengeQ');
+      const optsEl = document.getElementById('challengeOpts');
+
+      qEl.textContent = `[${challenge.type}] ${challenge.q}`;
+      optsEl.innerHTML = '';
+
+      const shuffled = shuffleArray(challenge.options);
+      shuffled.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'challenge-option';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => handleChallengeAnswer(btn, opt, challenge.answer, optsEl));
+        optsEl.appendChild(btn);
+      });
+
+      document.getElementById('challengePanel').classList.add('active');
+    }
+
+    function handleChallengeAnswer(btn, selected, correct, container) {
+      container.querySelectorAll('.challenge-option').forEach(b => {
+        b.disabled = true;
+        if (b.textContent === correct) b.classList.add('correct');
+      });
+
+      if (selected === correct) {
+        currentChallengeScore++;
+        currentChallengeStreak++;
+        pushMessage(`✓ Correcte! Punts: ${currentChallengeScore} · Ratxa: ${currentChallengeStreak}`, 'system');
+        haptic('success');
+      } else {
+        btn.classList.add('wrong');
+        currentChallengeStreak = 0;
+        pushMessage(`✗ Incorrecte. Resposta: ${correct}`, 'provoke');
+        haptic('error');
+      }
+
+      document.getElementById('challengeScore').innerText = currentChallengeScore;
+      document.getElementById('challengeStreak').innerText = currentChallengeStreak;
+
+      clearTimeout(challengeTimer);
+      challengeTimer = setTimeout(() => {
+        if (challengeActive && sessionActive) presentChallenge();
+      }, 4500);
+    }
+
+    function startChallengeEngine() {
+      challengeActive = true;
+      currentChallengeScore = 0;
+      currentChallengeStreak = 0;
+      document.getElementById('challengeScore').innerText = '0';
+      document.getElementById('challengeStreak').innerText = '0';
+    }
+
+    function stopChallengeEngine() {
+      challengeActive = false;
+      clearTimeout(challengeTimer);
+      const cp = document.getElementById('challengePanel');
+      if (cp) cp.classList.remove('active');
+    }
+
+    function updatePhaseBadge(phase) {
+      const badge = document.getElementById('phaseBadge');
+      if (!badge) return;
+      const phases = {
+        alpha: { text: 'α ALFA · 10 Hz', cls: 'phase-alpha' },
+        beta:  { text: 'β BETA · 16 Hz', cls: 'phase-beta' },
+        gamma: { text: 'γ GAMMA · 40 Hz', cls: 'phase-gamma' },
+        theta: { text: 'θ THETA · 6 Hz', cls: 'phase-theta' },
+        tgc:   { text: 'θγ COUPLING · 6+40 Hz', cls: 'phase-gamma' }
+      };
+      const p = phases[phase] || phases.alpha;
+      badge.className = `phase-badge ${p.cls}`;
+      badge.textContent = p.text;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // MENT SUPERIOR — THETA-GAMMA COUPLING
+    // ═══════════════════════════════════════════════════════════════
+    let tgcThetaOsc = null;
+    let tgcThetaDepth = null;
+    let tgcGammaL = null;
+    let tgcGammaR = null;
+    let tgcGammaGain = null;
+
+    function buildThetaGammaCoupling(thetaHz, gammaHz) {
+      if (!audioCtx || audioCtx.state === 'closed') return;
+
+      tgcGammaL = audioCtx.createOscillator();
+      tgcGammaR = audioCtx.createOscillator();
+      tgcGammaL.type = 'sine';
+      tgcGammaR.type = 'sine';
+      tgcGammaL.frequency.value = baseFreq * 1.5;
+      tgcGammaR.frequency.value = baseFreq * 1.5 + gammaHz;
+
+      tgcGammaGain = audioCtx.createGain();
+      tgcGammaGain.gain.value = 0;
+
+      tgcThetaOsc = audioCtx.createOscillator();
+      tgcThetaOsc.type = 'sine';
+      tgcThetaOsc.frequency.value = thetaHz;
+
+      tgcThetaDepth = audioCtx.createGain();
+      tgcThetaDepth.gain.value = 0;
+
+      const gPanL = audioCtx.createStereoPanner();
+      const gPanR = audioCtx.createStereoPanner();
+      gPanL.pan.value = -1;
+      gPanR.pan.value = 1;
+
+      tgcGammaL.connect(gPanL).connect(tgcGammaGain);
+      tgcGammaR.connect(gPanR).connect(tgcGammaGain);
+      tgcThetaOsc.connect(tgcThetaDepth).connect(tgcGammaGain.gain);
+      tgcGammaGain.connect(masterGain);
+
+      tgcGammaL.start();
+      tgcGammaR.start();
+      tgcThetaOsc.start();
+    }
+
+    function activateTGC(depth, rampTime) {
+      if (!tgcThetaDepth || !tgcGammaGain || !audioCtx) return;
+      const now = audioCtx.currentTime;
+      tgcThetaDepth.gain.setTargetAtTime(depth, now, rampTime);
+      tgcGammaGain.gain.setTargetAtTime(currentVolume * 0.35, now, rampTime);
+    }
+
+    function deactivateTGC(rampTime) {
+      if (!tgcThetaDepth || !tgcGammaGain || !audioCtx) return;
+      const now = audioCtx.currentTime;
+      tgcThetaDepth.gain.setTargetAtTime(0, now, rampTime);
+      tgcGammaGain.gain.setTargetAtTime(0, now, rampTime);
+    }
+
+    function cleanupTGC() {
+      try { if (tgcGammaL) tgcGammaL.stop(); } catch {}
+      try { if (tgcGammaR) tgcGammaR.stop(); } catch {}
+      try { if (tgcThetaOsc) tgcThetaOsc.stop(); } catch {}
+      tgcGammaL = null;
+      tgcGammaR = null;
+      tgcGammaGain = null;
+      tgcThetaOsc = null;
+      tgcThetaDepth = null;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // MENT SUPERIOR — PROTOCOL SCHEDULER
+    // ═══════════════════════════════════════════════════════════════
+    function scheduleSuperiorFlow() {
+      const history = loadHistory();
+      const level = history.currentLevel || 1;
+      const totalSec = totalSessionSeconds;
+
+      buildThetaGammaCoupling(6, 40);
+      startChallengeEngine();
+
+      const p2 = Math.round(totalSec * 0.12);
+      const p3 = Math.round(totalSec * 0.30);
+      const p4 = Math.round(totalSec * 0.48);
+      const p5 = Math.round(totalSec * 0.72);
+      const p6 = Math.round(totalSec * 0.87);
+
+      baseBeat = 10;
+      setBeatFrequency(baseBeat, 2.0);
+      updatePhaseBadge('alpha');
+      pushMessage('Fase 1 · Alfa: calibrant la teva línia base. Respira.', 'system');
+      haptic('phase');
+
+      const firstId = setTimeout(() => {
+        if (!sessionActive) return;
+        if (workMode) {
+          pushMessage('Mode Feina: la teva feina és l\'entrenament. Concentra\'t en el que fas.', 'hint');
+        } else {
+          pushMessage('Primer repte — mantén la calma.', 'hint');
+          presentChallenge();
+        }
+      }, Math.min(45, p2 - 5) * 1000);
+
+      const betaHz = 14 + Math.min(level, 5) * 0.8;
+      const betaId = setTimeout(() => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
+        baseBeat = betaHz;
+        setBeatFrequency(baseBeat, 1.3);
+        updatePhaseBadge('beta');
+        pushMessage(`Fase 2 · Beta (${betaHz.toFixed(1)} Hz): pensament ràpid. Resol.`, 'hint');
+        haptic('phase');
+        if (!workMode) presentChallenge();
+      }, p2 * 1000);
+
+      const betaIds = [];
+      for (let t = p2 + 22; t < p3 - 8; t += Math.round(randomBetween(18, 28))) {
+        const id = setTimeout(() => {
+          if (sessionActive && challengeActive && !workMode) presentChallenge();
+        }, t * 1000);
+        betaIds.push(id);
+      }
+
+      const gammaId = setTimeout(() => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
+        baseBeat = 40;
+        setBeatFrequency(baseBeat, 0.5);
+        updatePhaseBadge('gamma');
+        pushMessage('Fase 3 · Gamma pur: integració neuronal. Tot es connecta.', 'system');
+        haptic('phase');
+        if (!workMode) presentChallenge();
+      }, p3 * 1000);
+
+      const gammaIds = [];
+      for (let t = p3 + 15; t < p4 - 8; t += Math.round(randomBetween(12, 20))) {
+        const id = setTimeout(() => {
+          if (sessionActive && challengeActive && !workMode) presentChallenge();
+        }, t * 1000);
+        gammaIds.push(id);
+      }
+
+      const pulseIds = [];
+      for (let t = p3 + 10; t < p4; t += Math.round(randomBetween(15, 25))) {
+        const id = setTimeout(() => {
+          if (!audioCtx || audioCtx.state === 'closed') return;
+          const now = audioCtx.currentTime;
+          masterGain.gain.setTargetAtTime(currentVolume * 1.12, now, 0.3);
+          masterGain.gain.setTargetAtTime(currentVolume, now + 1.5, 0.5);
+        }, t * 1000);
+        pulseIds.push(id);
+      }
+
+      const tgcId = setTimeout(() => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
+        baseBeat = 6;
+        setBeatFrequency(baseBeat, 1.5);
+        activateTGC(currentVolume * 0.25, 2.0);
+        updatePhaseBadge('tgc');
+        pushMessage('═══ Fase 4 · THETA-GAMMA COUPLING ═══', 'system');
+        haptic('phase');
+        if (workMode) {
+          pushMessage('Coupling actiu. Segueix treballant — el cervell integra en segon pla.', 'system');
+        } else {
+          pushMessage('Gamma niuat dins theta. Això és el que fan els cervells superiors: cross-frequency coupling.', 'system');
+          pushMessage('Deixa la ment navegar. No forçis — observa.', 'hint');
+        }
+      }, p4 * 1000);
+
+      if (workMode) {
+        const workHints = [
+          { t: Math.round(totalSec * 0.35), msg: 'Gamma actiu: bon moment per als càlculs més complexos.', tone: 'hint' },
+          { t: Math.round(totalSec * 0.55), msg: 'Theta-gamma coupling: el teu cervell està en estat de màxima integració.', tone: 'system' },
+          { t: Math.round(totalSec * 0.80), msg: 'Consolidació: si tens una decisió pendent, ara la veuràs més clara.', tone: 'hint' }
+        ];
+        workHints.forEach(h => {
+          const id = setTimeout(() => {
+            if (sessionActive) pushMessage(h.msg, h.tone);
+          }, h.t * 1000);
+          messageTimeouts.push(id);
+        });
+      }
+
+      const tgcCIds = [];
+      for (let t = p4 + 30; t < p5 - 15; t += Math.round(randomBetween(25, 40))) {
+        const id = setTimeout(() => {
+          if (sessionActive && challengeActive && !workMode) presentChallenge();
+        }, t * 1000);
+        tgcCIds.push(id);
+      }
+
+      const tgcPulseIds = [];
+      for (let t = p4 + 12; t < p5; t += Math.round(randomBetween(12, 22))) {
+        const id = setTimeout(() => {
+          if (!audioCtx || audioCtx.state === 'closed') return;
+          const depth = randomBetween(0.15, 0.4) * currentVolume;
+          activateTGC(depth, 0.8);
+        }, t * 1000);
+        tgcPulseIds.push(id);
+      }
+
+      const tgcSyncIds = [];
+      for (let t = p4 + 20; t < p5; t += Math.round(randomBetween(18, 30))) {
+        const id = setTimeout(() => {
+          if (!leftDelay || !rightDelay || !audioCtx || audioCtx.state === 'closed') return;
+          leftDelay.delayTime.setTargetAtTime(randomBetween(0.0005, 0.005), audioCtx.currentTime, 0.6);
+          rightDelay.delayTime.setTargetAtTime(randomBetween(0.0005, 0.005), audioCtx.currentTime, 0.6);
+        }, t * 1000);
+        tgcSyncIds.push(id);
+      }
+
+      const consId = setTimeout(() => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
+        deactivateTGC(2.0);
+        baseBeat = 11;
+        setBeatFrequency(baseBeat, 2.0);
+        updatePhaseBadge('alpha');
+        pushMessage('Fase 5 · Alfa alta: consolidació. El cervell integra les connexions.', 'hint');
+        haptic('phase');
+        if (!workMode) presentChallenge();
+      }, p5 * 1000);
+
+      const consIds = [];
+      for (let t = p5 + 20; t < p6 - 10; t += Math.round(randomBetween(20, 35))) {
+        const id = setTimeout(() => {
+          if (sessionActive && challengeActive && !workMode) presentChallenge();
+        }, t * 1000);
+        consIds.push(id);
+      }
+
+      const deepId = setTimeout(() => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
+        deactivateTGC(1.5);
+        baseBeat = 5;
+        setBeatFrequency(baseBeat, 2.5);
+        updatePhaseBadge('theta');
+        stopChallengeEngine();
+        if (breathLfo) {
+          breathLfo.frequency.setTargetAtTime(0.07, audioCtx.currentTime, 1.5);
+        }
+        pushMessage('Fase final · Theta profund: zero reptes. Totes les connexions es consoliden en silenci.', 'system');
+        if (workMode) {
+          pushMessage('Sessió de feina completada. Les freqüències han acompanyat el teu treball.', 'hint');
+        } else {
+          pushMessage(`Sessió completada. Puntuació: ${currentChallengeScore} encerts.`, 'hint');
+        }
+      }, p6 * 1000);
+
+      messageTimeouts.push(
+        firstId, betaId, gammaId, tgcId, consId, deepId,
+        ...betaIds, ...gammaIds, ...pulseIds,
+        ...tgcCIds, ...tgcPulseIds, ...tgcSyncIds, ...consIds
+      );
+    }
+
+    function scheduleInsightFlow() {
+      const gammaDuration = Math.round(randomBetween(30, 60));
+      pushMessage('Repte absurd: connecta dues coses llunyanes.', 'hint');
+      const gammaId = setTimeout(() => {
+        baseBeat = 40;
+        setBeatFrequency(baseBeat, 0.7);
+        haptic('phase');
+      }, 3000);
+      const thetaId = setTimeout(() => {
+        baseBeat = 6;
+        setBeatFrequency(baseBeat, 1.8);
+        pushMessage('Ara deixa que el theta faci el seu treball.', 'system');
+        haptic('phase');
+      }, gammaDuration * 1000);
+      messageTimeouts.push(gammaId, thetaId);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════
+    // KNOWLEDGE BASE (NeuroExplora content)
+    // ═══════════════════════════════════════════════════════════════
+    const knowledgeBase = {
+      neurociencia: [
+        { title: 'Neuroplasticitat', body: 'El cervell pot reorganitzar-se formant noves connexions neurals durant tota la vida.', deep: 'La neuroplasticitat és la base de l\'aprenentatge i la recuperació post-lesió.', connection: 'Es relaciona amb memòria de treball, aprenentatge motor i recuperació d\'ictus.' },
+        { title: 'Theta-Gamma Coupling', body: 'Ones theta (4-8 Hz) modulen l\'amplitud de gamma (30-100 Hz) en tasques de memòria.', deep: 'Aquest acoblament cross-frequency és crucial per la memòria de treball.', connection: 'Relacionat amb creativitat, resolució de problemes i states de flow.' },
+        { title: 'Dopamina i motivació', body: 'La dopamina no és "plaer" sinó predicció d\'error de recompensa.', deep: 'El sistema dopaminèrgic compara recompensa esperada vs rebuda.', connection: 'Clau en addiccions, procrastinació, flow states i aprenentatge per reforç.' }
+      ],
+      filosofia: [
+        { title: 'Cogito ergo sum', body: 'Descartes: "Penso, per tant existeixo". La única veritat indubtable.', deep: 'Mètode del dubte hiperbòlic. Fins i tot si un geni maliciós m\'enganya, jo penso, per tant existeixo.', connection: 'Base del racionalisme, dualisme ment-cos, i fonament de la filosofia moderna.' },
+        { title: 'L\'al·legoria de la cova', body: 'Plató: els humans veiem ombres de la realitat, no la realitat mateixa.', deep: 'Presoners lligats només veuen ombres al mur. L\'educació és sortir de la cova cap al món de les Idees.', connection: 'Relacionat amb epistemologia, teoria de les Idees, realitat vs aparença.' },
+        { title: 'Imperatius categòrics', body: 'Kant: actua només segons màximes que puguis volguer que esdevinguin llei universal.', deep: 'Ètica deontològica: els actes són bons/dolents per si mateixos, no per conseqüències.', connection: 'Fonament de drets humans, autonomia moral i ètica contemporània.' }
+      ],
+      fisica: [
+        { title: 'Principi d\'incertesa', body: 'Heisenberg: no pots conèixer simultàniament posició i moment d\'una partícula amb precisió.', deep: 'ΔxΔp ≥ ħ/2. No és limitació tecnològica, és fonamental.', connection: 'Fonament de mecànica quàntica, dualitat ona-partícula, col·lapse de funció d\'ona.' },
+        { title: 'Entrellaçament quàntic', body: 'Dues partícules correlacionades instantàniament, independentment de la distància.', deep: 'Bell demostrà que no són variables ocultes locals. "Acció fantasmagòrica" (Einstein).', connection: 'Computació quàntica, criptografia quàntica, no-localitat.' },
+        { title: 'Relativitat del temps', body: 'Einstein: el temps no és absolut, depèn de velocitat i gravetat.', deep: 'Dilatació temporal: rellotges en moviment van més lents.', connection: 'Espai-temps, forats negres, viatges temporals, paradoxa dels bessons.' }
+      ],
+      matematiques: [
+        { title: 'Teorema d\'incompletesa de Gödel', body: 'Cap sistema formal consistent i prou fort pot demostrar totes les veritats sobre nombres.', deep: 'Hi ha enunciats veritats però indemostrables dins el sistema.', connection: 'Límits de la computació, paradoxes lògiques, intel·ligència artificial.' },
+        { title: 'Infinits de Cantor', body: 'Hi ha infinits més grans que altres. |ℝ| > |ℕ|.', deep: 'Cardinals transfinits: ℵ₀ (enters), c (reals).', connection: 'Teoria de conjunts, topologia, anàlisi real.' },
+        { title: 'Nombre e', body: 'Base dels logaritmes naturals, ~2.71828, apareix en creixement continu.', deep: 'e^x és l\'única funció que és la seva pròpia derivada.', connection: 'Càlcul, probabilitats, creixement exponencial, Euler.' }
+      ],
+      psicologia: [
+        { title: 'Efecte Dunning-Kruger', body: 'Les persones incompetents sobreestimen les seves habilitats.', deep: 'La mateixa ignorància impedeix reconèixer la pròpia incompetència.', connection: 'Metacognició, biaixos cognitius, confiança vs competència.' },
+        { title: 'Teoria del Flow', body: 'Csikszentmihalyi: estat d\'immersió total quan repte i habilitat estan equilibrats.', deep: 'Requereix objectius clars, feedback immediat, concentració intensa.', connection: 'Motivació intrínseca, productivitat, creativitat, benestar.' },
+        { title: 'Dissonància cognitiva', body: 'Tensió psicològica quan mantenim creences o actes contradictoris.', deep: 'Festinger: després d\'una decisió, racionalitzem per reduir dissonància.', connection: 'Canvi d\'actituds, racionalització, autojustificació.' }
+      ],
+      art: [
+        { title: 'Secció àuria en art', body: 'Proporció φ utilitzada en composició per equilibri estètic.', deep: 'Partenó, Mona Lisa, espirals de Van Gogh. Relació 1:1.618.', connection: 'Matemàtiques, geometria, percepció visual, arquitectura.' },
+        { title: 'Perspectiva de Brunelleschi', body: 'Tècnica per representar profunditat en superfície plana amb punt de fuga.', deep: 'Renaixement: geometria projectiva. Revolucionà la pintura realista.', connection: 'Geometria, visió, arquitectura, cinema.' },
+        { title: 'Sinestèsia en Kandinsky', body: 'Veia colors en escoltar música. Pintava "simfonies visuals".', deep: 'Sinestèsia: mescla de sentits. Kandinsky: colors tenen temperatura i so.', connection: 'Neurociència, percepció, música, art abstracte.' }
+      ],
+      tecnologia: [
+        { title: 'Blockchain', body: 'Registre distribuït immutable on cada bloc conté hashs del bloc anterior.', deep: 'Consens descentralitzat (PoW, PoS). Bitcoin: primera aplicació.', connection: 'Criptografia, economia, web3, descentralització.' },
+        { title: 'Transformers (IA)', body: 'Arquitectura de xarxes neuronals basada en mecanisme d\'atenció.', deep: 'Vaswani et al. (2017). Self-attention: paraules atenen a paraules.', connection: 'NLP, visió per computador, atenció, aprenentatge profund.' },
+        { title: 'Computació quàntica', body: 'Usa qubits en superposició per resoldre problemes intractables clàssicament.', deep: 'Algoritmes de Shor (factorització), Grover (cerca).', connection: 'Física quàntica, criptografia, optimització, ML.' }
+      ],
+      biologia: [
+        { title: 'Epigenètica', body: 'Canvis en expressió gènica sense alterar la seqüència d\'ADN.', deep: 'Metilació, histones. Heretables. Ambient, estrès, dieta afecten.', connection: 'Genètica, evolució, desenvolupament, medicina.' },
+        { title: 'Microbioma intestinal', body: 'Trilions de bacteris al tub digestiu influeixen en salut física i mental.', deep: 'Eix intestí-cervell. Produeixen serotonina, afecten immun, metabolisme.', connection: 'Nutrició, psiquiatria, immunologia, evolució.' },
+        { title: 'Telòmers i envelliment', body: 'Extrems dels cromosomes que s\'escurcen amb cada divisió cel·lular.', deep: 'Telomerasa els allarga. Curt telòmer: senescència cel·lular.', connection: 'Envelliment, càncer, genètica, medicina preventiva.' }
+      ],
+      linguistica: [
+        { title: 'Gramàtica universal de Chomsky', body: 'Humans neixen amb estructura gramatical innata, compartida per totes les llengües.', deep: 'Pobreza de l\'estímul: infants aprenen massa ràpid sense prou input.', connection: 'Cognició, adquisició llenguatge, neurociència, IA.' },
+        { title: 'Hipòtesi Sapir-Whorf', body: 'La llengua que parles modela com penses i perceps el món.', deep: 'Versió forta (determinisme) vs dèbil (relativisme). Colors, temps, espai varien.', connection: 'Cognició, percepció, antropologia, filosofia.' },
+        { title: 'Fonemes i al·lòfons', body: 'Fonemes són sons distintius; al·lòfons són variacions no distintives.', deep: '/p/ a català: [p] (poma), [b] (també). Japonès: /r/ i /l/ són al·lòfons.', connection: 'Fonologia, percepció, adquisició, diversitat lingüística.' }
+      ],
+      sociologia: [
+        { title: 'Capital cultural de Bourdieu', body: 'Coneixements, habilitats, educació i avantatges que una persona posseeix.', deep: 'Tres formes: incorporat (saber-fer), objectivat (llibres, art), institucionalitzat (títols).', connection: 'Estratificació, educació, classe social, mobilitat.' },
+        { title: 'Panopticon de Foucault', body: 'Arquitectura de presó on vigilant central pot observar tots els presos sense ser vist.', deep: 'Metàfora del poder modern: autodisciplina per por a ser observat.', connection: 'Poder, vigilància, privacitat, disciplina.' },
+        { title: 'Construcció social de la realitat', body: 'Berger/Luckmann: la realitat social és creada i mantinguda per interaccions humanes.', deep: 'Externalització, objectivació, internalització.', connection: 'Fenomenologia, interaccionisme, etnometodologia.' }
+      ],
+      economia: [
+        { title: 'Teoria dels jocs', body: 'Estudi de decisions estratègiques on el resultat depèn de decisions d\'altres.', deep: 'Equilibri de Nash: cap jugador millora canviant unilateralment.', connection: 'Estratègia, cooperació, evolució, política.' },
+        { title: 'Ma invisible d\'Adam Smith', body: 'Mercat lliure auto-regula: individus perseguint interès propi beneficien col·lectivament.', deep: 'Oferta i demanda s\'equilibren. Però requereix competència, informació.', connection: 'Liberalisme, micro, macro, ètica.' },
+        { title: 'Destrucció creativa de Schumpeter', body: 'Innovació destrueix estructures velles i crea noves. Motor del capitalisme.', deep: 'Empresaris innoven, monopolis temporals, després competència.', connection: 'Innovació, emprenedoria, cicles, tecnologia.' }
+      ],
+      historia: [
+        { title: 'Revolució neolítica', body: 'Transició de caçadors-recol·lectors a agricultura i assentaments permanents.', deep: '~10.000 aC. Creixent Fèrtil. Canvi: alimentació, densitat populacional, especialització.', connection: 'Evolució cultural, civilització, estat, desigualtat.' },
+        { title: 'Ruta de la Seda', body: 'Xarxa de rutes comercials connectant Orient i Occident.', deep: 'No només seda: idees, religions (Budisme, Islam), tecnologies (paper, pólvora).', connection: 'Comerç, difusió cultural, imperi, tecnologia.' },
+        { title: 'Revolució francesa', body: '1789: caiguda monarquia absoluta, ideals llibertat, igualtat, fraternitat.', deep: 'Il·lustració, crisi fiscal, desigualtat. Terror, Napoleó.', connection: 'Democràcia, drets, nació-estat, modernitat.' }
+      ]
+    };
+
+
+    // ═══════════════════════════════════════════════════════════════
+    // HELPER FUNCTIONS FOR NEW FEATURES
+    // ═══════════════════════════════════════════════════════════════
+    
+    function haptic(style) {
+      if (!navigator.vibrate && !window.navigator.webkitVibrate) return;
+      const patterns = { light: [10], medium: [30], heavy: [50], phase: [20, 50, 20], success: [10, 20, 10, 20, 10], error: [100, 50, 100] };
+      const pattern = patterns[style] || patterns.light;
+      if (navigator.vibrate) navigator.vibrate(pattern);
+      else if (window.navigator.webkitVibrate) window.navigator.webkitVibrate(pattern);
+    }
+
+    function loadReviews() {
+      try { const raw = localStorage.getItem(REVIEWS_KEY); return raw ? JSON.parse(raw) : {}; } catch { return {}; }
+    }
+
+    function saveReviews(reviews) {
+      try { localStorage.setItem(REVIEWS_KEY, JSON.stringify(reviews)); } catch {}
+    }
+
+    function scheduleReview(pillId) {
+      const reviews = loadReviews();
+      if (!reviews[pillId]) reviews[pillId] = { interval: 0, nextReview: Date.now(), count: 0 };
+      const intervals = [1, 3, 7, 21, 60];
+      const review = reviews[pillId];
+      review.count++;
+      review.interval = Math.min(review.count, intervals.length - 1);
+      review.nextReview = Date.now() + intervals[review.interval] * 86400000;
+      saveReviews(reviews);
+    }
+
+    function getDueReviews() {
+      const reviews = loadReviews();
+      const now = Date.now();
+      return Object.keys(reviews).filter(id => reviews[id].nextReview <= now);
+    }
+
+    function shouldShowReview() {
+      const dueCount = getDueReviews().length;
+      return dueCount > 0 && Math.random() < 0.3;
+    }
+
+    function applyCategoryAmbience(category) {
+      if (!audioCtx || !leftOsc || !rightOsc) return;
+      const map = { neurociencia: { carrier: 1.2, beatShift: 40 }, filosofia: { carrier: 1.0, beatShift: 10 }, fisica: { carrier: 1.3, beatShift: 42 }, matematiques: { carrier: 1.1, beatShift: 14 }, psicologia: { carrier: 1.0, beatShift: 12 }, art: { carrier: 0.9, beatShift: 8 }, tecnologia: { carrier: 1.4, beatShift: 38 }, biologia: { carrier: 1.1, beatShift: 16 }, linguistica: { carrier: 1.0, beatShift: 11 }, sociologia: { carrier: 1.0, beatShift: 9 }, economia: { carrier: 1.2, beatShift: 15 }, historia: { carrier: 0.95, beatShift: 7 } };
+      const amb = map[category] || { carrier: 1.0, beatShift: 10 };
+      const now = audioCtx.currentTime;
+      leftOsc.frequency.setTargetAtTime(baseFreq * amb.carrier, now, 1.5);
+      rightOsc.frequency.setTargetAtTime(baseFreq * amb.carrier + baseBeat + amb.beatShift, now, 1.5);
+    }
+
+    function loadCustomPills() {
+      try { const raw = localStorage.getItem(CUSTOM_PILLS_KEY); return raw ? JSON.parse(raw) : []; } catch { return []; }
+    }
+
+    function saveCustomPill(pill) {
+      const pills = loadCustomPills();
+      pill.id = 'custom_' + Date.now();
+      pill.created = new Date().toISOString();
+      pills.push(pill);
+      try { localStorage.setItem(CUSTOM_PILLS_KEY, JSON.stringify(pills)); haptic('success'); return true; } catch { return false; }
+    }
+
+    function loadDiscoveries() {
+      try { const raw = localStorage.getItem(DISCOVERIES_KEY); return raw ? JSON.parse(raw) : []; } catch { return []; }
+    }
+
+    function saveDiscovery(text, category) {
+      const discoveries = loadDiscoveries();
+      discoveries.push({ text, category, timestamp: new Date().toISOString() });
+      try { localStorage.setItem(DISCOVERIES_KEY, JSON.stringify(discoveries)); } catch {}
+    }
+
+    async function shareDiscovery(text, category) {
+      const shareData = { title: 'NeuroFriction Discovery', text: `[${category}] ${text}\n\nDescobert amb NeuroFriction v5` };
+      if (navigator.share) {
+        try { await navigator.share(shareData); haptic('success'); pushMessage('Compartit correctament!', 'system'); } 
+        catch (err) { if (err.name !== 'AbortError') fallbackCopyToClipboard(shareData.text); }
+      } else { fallbackCopyToClipboard(shareData.text); }
+    }
+
+    function fallbackCopyToClipboard(text) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => { haptic('medium'); pushMessage('Copiat al portapapers!', 'hint'); });
+      } else { alert('Text per compartir:\n\n' + text); }
+    }
+
+    function getDailyChallenge() {
+      const challenges = ['Troba 3 connexions entre conceptes de categories diferents avui.', 'Explica un concepte complex a algú sense formació tècnica.', 'Qüestiona una creença que has tingut durant anys.', 'Aprèn quelcom completament fora de la teva zona de confort.', 'Escriu una metàfora per a un concepte abstracte que has après recentment.', 'Connecta un concepte científic amb una obra d\'art.', 'Reflexiona: què has desaprès aquesta setmana?', 'Ensenya un concepte nou a través d\'una història.', 'Troba la paradoxa o contradicció en una idea que defendes.', 'Combina dues idees oposades en una síntesi nova.'];
+      const today = new Date().toISOString().slice(0, 10);
+      const seed = today.split('-').reduce((a, b) => parseInt(a) + parseInt(b), 0);
+      return challenges[seed % challenges.length];
+    }
+
+    function exportData() {
+      const data = { version: '5.0', exported: new Date().toISOString(), customPills: loadCustomPills(), discoveries: loadDiscoveries(), reviews: loadReviews(), sessions: loadHistory() };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `neurofriction-data-${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      haptic('success');
+      pushMessage('Dades exportades correctament!', 'system');
+    }
+
+    function importData(jsonString) {
+      try {
+        const data = JSON.parse(jsonString);
+        if (data.customPills) localStorage.setItem(CUSTOM_PILLS_KEY, JSON.stringify(data.customPills));
+        if (data.discoveries) localStorage.setItem(DISCOVERIES_KEY, JSON.stringify(data.discoveries));
+        if (data.reviews) localStorage.setItem(REVIEWS_KEY, JSON.stringify(data.reviews));
+        if (data.sessions) localStorage.setItem(STORAGE_KEY, JSON.stringify(data.sessions));
+        haptic('success');
+        pushMessage('Dades importades correctament!', 'system');
+        updateDashboard();
+        updateStatsDisplay();
+      } catch (err) { haptic('error'); alert('Error en importar dades. Verifica el format JSON.'); }
+    }
+
+    // NEW: NEUROEXPLORA SYSTEM
+    // ═══════════════════════════════════════════════════════════════
+    function initNeuroExplora() {
+      const container = document.getElementById('exploreContent');
+      const style = document.getElementById('exploreStyle').value;
+      container.innerHTML = '';
+      
+      // Check for reviews first
+      if (shouldShowReview()) {
+        const dueIds = getDueReviews();
+        const reviewId = dueIds[Math.floor(Math.random() * dueIds.length)];
+        const [category, index] = reviewId.split('_');
+        const pill = knowledgeBase[category][parseInt(index)];
+        if (pill) {
+          showPill(pill, category, true);
+          return;
+        }
+      }
+      
+      // Otherwise show new content
+      if (style === 'aleatori') {
+        const allCategories = Object.keys(knowledgeBase);
+        const cat = allCategories[Math.floor(Math.random() * allCategories.length)];
+        const pills = knowledgeBase[cat];
+        const pill = pills[Math.floor(Math.random() * pills.length)];
+        showPill(pill, cat, false);
+      } else if (style === 'progressiu') {
+        // Show pills from simpler to more complex
+        const history = loadHistory();
+        const level = Math.min(history.currentLevel || 1, 3);
+        const allPills = [];
+        Object.keys(knowledgeBase).forEach(cat => {
+          knowledgeBase[cat].slice(0, level * 3).forEach((pill, idx) => {
+            allPills.push({ pill, cat, idx });
+          });
+        });
+        const selected = allPills[Math.floor(Math.random() * allPills.length)];
+        showPill(selected.pill, selected.cat, false);
+      } else if (style === 'connexions') {
+        // Show pills from different categories
+        const categories = Object.keys(knowledgeBase);
+        const cat1 = categories[Math.floor(Math.random() * categories.length)];
+        let cat2 = categories[Math.floor(Math.random() * categories.length)];
+        while (cat2 === cat1 && categories.length > 1) {
+          cat2 = categories[Math.floor(Math.random() * categories.length)];
+        }
+        const pill1 = knowledgeBase[cat1][Math.floor(Math.random() * knowledgeBase[cat1].length)];
+        const pill2 = knowledgeBase[cat2][Math.floor(Math.random() * knowledgeBase[cat2].length)];
+        showPill(pill1, cat1, false);
+        setTimeout(() => showPill(pill2, cat2, false), 500);
+      }
+    }
+
+    function showPill(pill, category, isReview) {
+      const container = document.getElementById('exploreContent');
+      const card = document.createElement('div');
+      card.className = 'explore-card' + (isReview ? ' review' : '');
+      
+      const catDiv = document.createElement('div');
+      catDiv.className = 'explore-category';
+      catDiv.textContent = (isReview ? '[REPÀS] ' : '') + category.toUpperCase();
+      
+      const titleDiv = document.createElement('div');
+      titleDiv.className = 'explore-title';
+      titleDiv.textContent = pill.title;
+      
+      const bodyDiv = document.createElement('div');
+      bodyDiv.className = 'explore-body';
+      bodyDiv.textContent = pill.body;
+      
+      card.appendChild(catDiv);
+      card.appendChild(titleDiv);
+      card.appendChild(bodyDiv);
+      
+      card.addEventListener('click', () => {
+        if (!card.classList.contains('expanded')) {
+          const deepDiv = document.createElement('div');
+          deepDiv.className = 'explore-deep';
+          deepDiv.textContent = pill.deep;
+          
+          const connDiv = document.createElement('div');
+          connDiv.className = 'explore-connection';
+          connDiv.textContent = '🔗 ' + pill.connection;
+          
+          card.appendChild(deepDiv);
+          card.appendChild(connDiv);
+          card.classList.add('expanded');
+          haptic('medium');
+          
+          // Schedule for review
+          const pillId = `${category}_${knowledgeBase[category].indexOf(pill)}`;
+          scheduleReview(pillId);
+          
+          // Apply category ambience if in session
+          if (sessionActive) {
+            applyCategoryAmbience(category);
+          }
+        }
+      });
+      
+      container.appendChild(card);
+      
+      if (sessionActive) {
+        // Present integration challenge
+        setTimeout(() => {
+          pushMessage(`Repte d'integració: Com es relaciona "${pill.title}" amb el teu context actual?`, 'provoke');
+        }, 8000);
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // SESSION MANAGEMENT
+    // ═══════════════════════════════════════════════════════════════
+    function updateTimer() {
+      if (!showTimer) return;
+      const m = Math.floor(remainingSessionSeconds / 60);
+      const s = remainingSessionSeconds % 60;
+      document.getElementById('timer').innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+      if (totalSessionSeconds > 0) {
+        const progress = ((totalSessionSeconds - remainingSessionSeconds) / totalSessionSeconds) * 100;
+        document.getElementById('progressBar').style.width = `${Math.min(100, Math.max(0, progress))}%`;
+      }
+    }
+
+    function setSessionButtons(running, paused) {
+      const startBtn = document.getElementById('startBtn');
+      const pauseBtn = document.getElementById('pauseBtn');
+      const resumeBtn = document.getElementById('resumeBtn');
+      const stopBtn = document.getElementById('stopBtn');
+
+      if (!running) {
+        startBtn.disabled = false;
+        pauseBtn.disabled = true;
+        resumeBtn.disabled = true;
+        stopBtn.disabled = true;
+        return;
+      }
+
+      startBtn.disabled = true;
+      stopBtn.disabled = false;
+      pauseBtn.disabled = paused || !allowPause;
+      resumeBtn.disabled = !paused || !allowPause;
+    }
+
+    function startTimerInterval() {
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (!sessionActive) return;
+        remainingSessionSeconds--;
+        updateTimer();
+        if (remainingSessionSeconds <= 0) {
+          stopSession(false);
+        }
+      }, 1000);
+    }
+
+    function startSession() {
+      if (sessionActive) {
+        stopSession(true);
+      }
+
+      const intensity = document.getElementById('intensity').value;
+      const profile = intensityProfiles[intensity] || intensityProfiles.mid;
+      baseBeat = profile.beat;
+
+      if (selectedMode === 'antibiais') {
+        const opinion = document.getElementById('opinionInput').value.trim();
+        if (!opinion) {
+          alert('Escriu una opinio abans d entrar en Antibiais Brutal.');
+          return;
+        }
+      }
+
+      const durationInput = parseInt(document.getElementById('duration').value, 10);
+      const minDuration = parseInt(document.getElementById('minDuration').value, 10);
+      const maxDuration = parseInt(document.getElementById('maxDuration').value, 10);
+      let minutes = durationInput;
+
+      if (selectedMode === 'nocontrol') {
+        const safeMin = Math.min(minDuration, maxDuration);
+        const safeMax = Math.max(minDuration, maxDuration);
+        minutes = Math.round(randomBetween(safeMin, safeMax));
+      }
+
+      showTimer = selectedMode !== 'nocontrol';
+      allowPause = selectedMode !== 'nocontrol';
+
+      document.getElementById('progressWrap').classList.toggle('hide', !showTimer);
+      document.getElementById('timer').classList.toggle('hide', !showTimer);
+
+      totalSessionSeconds = minutes * 60;
+      remainingSessionSeconds = totalSessionSeconds;
+
+      sessionActive = true;
+      isPaused = false;
+
+      clearFeed();
+      clearReport();
+      buildAudioGraph(baseBeat);
+      setStatus('Sistema calibrant...');
+      pushMessage('Entrada. El sistema t esta llegint.', 'system');
+      haptic('medium');
+
+      scheduleMicroShift();
+      scheduleSilenceDip(profile.dipDepth);
+      scheduleFrictionCues();
+
+      if (selectedMode === 'antibiais') {
+        scheduleAntibiasFlow();
+      }
+      if (selectedMode === 'insight') {
+        scheduleInsightFlow();
+      }
+      if (selectedMode === 'claredat') {
+        scheduleClarityFlow();
+      }
+      if (selectedMode === 'superior') {
+        scheduleSuperiorFlow();
+      }
+      if (selectedMode === 'neuroexplora') {
+        initNeuroExplora();
+        // Refresh pills periodically
+        const refreshId = setInterval(() => {
+          if (sessionActive && selectedMode === 'neuroexplora') {
+            initNeuroExplora();
+          }
+        }, 180000); // Every 3 minutes
+        messageTimeouts.push(refreshId);
+      }
+
+      updateTimer();
+      setSessionButtons(true, false);
+      startTimerInterval();
+      setStatus('Sessio viva en curs.');
+    }
+
+    function pauseSession() {
+      if (!audioCtx || isPaused || !allowPause) return;
+      isPaused = true;
+      clearInterval(timerInterval);
+      if (audioCtx.state === 'running') {
+        audioCtx.suspend().catch(err => console.error('Failed to suspend audio context:', err));
+      }
+      setStatus('Sessio en pausa.');
+      setSessionButtons(true, true);
+    }
+
+    function resumeSession() {
+      if (!audioCtx || !isPaused || !allowPause) return;
+      isPaused = false;
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume().catch(err => console.error('Failed to resume audio context:', err));
+      }
+      setStatus('Sessio reactivada.');
+      setSessionButtons(true, false);
+      startTimerInterval();
+    }
+
+    function stopSession(isRestart = false) {
+      clearInterval(timerInterval);
+      clearTimeout(microShiftTimeout);
+      clearTimeout(silenceTimeout);
+      messageTimeouts.forEach(id => clearTimeout(id));
+      messageTimeouts = [];
+
+      cleanupTGC();
+      stopChallengeEngine();
+
+      if (leftOsc) leftOsc.stop();
+      if (rightOsc) rightOsc.stop();
+      if (breathLfo) breathLfo.stop();
+      if (audioCtx) audioCtx.close();
+
+      audioCtx = null;
+      leftOsc = null;
+      rightOsc = null;
+      noise = null;
+      masterGain = null;
+      breathLfo = null;
+      breathDepth = null;
+      leftDelay = null;
+      rightDelay = null;
+      leftPan = null;
+      rightPan = null;
+      sessionActive = false;
+      isPaused = false;
+
+      setSessionButtons(false, false);
+
+      if (!isRestart) {
+        if (selectedMode === 'superior') {
+          recordSession(currentChallengeScore, Math.round(totalSessionSeconds / 60));
+          updatePhaseBadge('alpha');
+          document.getElementById('phaseBadge').textContent = 'COMPLETAT';
+        }
+        setStatus('Sessio finalitzada.');
+        generateReport();
+        startRitualCountdown();
+        haptic('success');
+      }
+    }
+
+    function generateReport() {
+      const rating = parseInt(document.getElementById('selfRating').value, 10);
+      const lines = [];
+      const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+      lines.push(pick(reportSeeds.resilience));
+      lines.push(pick(reportSeeds.clarity));
+      lines.push(pick(reportSeeds.transitions));
+
+      if (rating <= 2) {
+        lines[0] = 'La friccio ha estat massa intensa avui.';
+      }
+      if (selectedMode === 'nocontrol') {
+        lines[2] = 'La rendicio cognitiva ha deixat espai a la claredat.';
+      }
+      if (selectedMode === 'claredat') {
+        lines[0] = pick(reportSeeds.intelligence);
+        lines[2] = 'La progressió alfa→beta→gamma ha activat noves connexions.';
+      }
+      if (selectedMode === 'superior') {
+        lines[0] = pick(reportSeeds.superior);
+        lines[1] = `Puntuació cognitiva: ${currentChallengeScore} encerts.`;
+        lines[2] = 'El theta-gamma coupling ha simulat l\'arquitectura dels cervells d\'alt rendiment.';
+      }
+      if (selectedMode === 'neuroexplora') {
+        const reviews = loadReviews();
+        const discoveries = loadDiscoveries();
+        lines[0] = `Has explorat ${Object.keys(reviews).length} píndoles de coneixement.`;
+        lines[1] = 'La connexió interdisciplinària ha activat noves vies cognitives.';
+        lines[2] = `Has guardat ${discoveries.length} insights. La spaced repetition consolidarà el coneixement.`;
+      }
+
+      const reportList = document.getElementById('reportList');
+      reportList.innerHTML = '';
+      lines.forEach(line => {
+        const item = document.createElement('div');
+        item.textContent = line;
+        reportList.appendChild(item);
+      });
+
+      document.getElementById('reportKey').innerText = pick(reportSeeds.keys);
+      document.getElementById('reportPanel').classList.add('active');
+    }
+
+    function startRitualCountdown() {
+      const overlay = document.getElementById('ritualOverlay');
+      const countdown = document.getElementById('ritualCountdown');
+      const closeBtn = document.getElementById('ritualClose');
+      let remaining = 30;
+
+      overlay.classList.add('active');
+      overlay.setAttribute('aria-hidden', 'false');
+      closeBtn.disabled = true;
+      countdown.innerText = remaining;
+
+      clearInterval(ritualInterval);
+      ritualInterval = setInterval(() => {
+        remaining -= 1;
+        countdown.innerText = remaining;
+        if (remaining <= 0) {
+          clearInterval(ritualInterval);
+          closeBtn.disabled = false;
+        }
+      }, 1000);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // EVENT LISTENERS
+    // ═══════════════════════════════════════════════════════════════
+
+    // Ritual overlay
+    document.getElementById('ritualClose').addEventListener('click', () => {
+      const overlay = document.getElementById('ritualOverlay');
+      overlay.classList.remove('active');
+      overlay.setAttribute('aria-hidden', 'true');
+    });
+
+    // Mode selection
+    document.querySelectorAll('.mode-card').forEach(btn => {
+      btn.addEventListener('click', () => setMode(btn.dataset.mode));
+    });
+
+    // Volume control
+    document.getElementById('volume').addEventListener('input', (event) => {
+      setVolume(parseFloat(event.target.value));
+    });
+
+    // Self rating
+    document.getElementById('selfRating').addEventListener('input', (event) => {
+      document.getElementById('ratingValue').innerText = `${event.target.value}/5`;
+    });
+
+    // Session controls
+    document.getElementById('startBtn').addEventListener('click', startSession);
+    document.getElementById('pauseBtn').addEventListener('click', pauseSession);
+    document.getElementById('resumeBtn').addEventListener('click', resumeSession);
+    document.getElementById('stopBtn').addEventListener('click', () => stopSession(false));
+
+    // Work mode toggle
+    document.getElementById('workModeToggle').addEventListener('change', (event) => {
+      workMode = event.target.checked;
+      const cpanel = document.getElementById('challengePanel');
+      if (cpanel) cpanel.classList.toggle('hide', workMode);
+      const scoreRow = document.querySelector('.challenge-score');
+      if (scoreRow) scoreRow.style.display = workMode ? 'none' : '';
+    });
+
+    // NEW: Export/Import buttons
+    document.getElementById('exportBtn').addEventListener('click', exportData);
+    
+    document.getElementById('importBtn').addEventListener('click', () => {
+      document.getElementById('importFile').click();
+    });
+    
+    document.getElementById('importFile').addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          importData(e.target.result);
+        };
+        reader.readAsText(file);
+      }
+    });
+
+    // NEW: Add pill button
+    document.getElementById('addPillBtn').addEventListener('click', () => {
+      document.getElementById('pillEditorModal').classList.add('active');
+      haptic('light');
+    });
+
+    document.getElementById('cancelPillBtn').addEventListener('click', () => {
+      document.getElementById('pillEditorModal').classList.remove('active');
+    });
+
+    document.getElementById('savePillBtn').addEventListener('click', () => {
+      const category = document.getElementById('pillCategory').value;
+      const title = document.getElementById('pillTitle').value.trim();
+      const body = document.getElementById('pillBody').value.trim();
+      const deep = document.getElementById('pillDeep').value.trim();
+      const connection = document.getElementById('pillConnection').value.trim();
+
+      if (!title || !body) {
+        alert('Títol i cos són obligatoris.');
+        return;
+      }
+
+      const pill = { title, body, deep, connection, category };
+      if (saveCustomPill(pill)) {
+        pushMessage('Píndola personalitzada desada!', 'system');
+        document.getElementById('pillEditorModal').classList.remove('active');
+        // Clear form
+        document.getElementById('pillTitle').value = '';
+        document.getElementById('pillBody').value = '';
+        document.getElementById('pillDeep').value = '';
+        document.getElementById('pillConnection').value = '';
+      } else {
+        alert('Error en desar la píndola.');
+      }
+    });
+
+    // NEW: Share button
+    document.getElementById('shareBtn').addEventListener('click', () => {
+      const discoveries = loadDiscoveries();
+      if (discoveries.length === 0) {
+        alert('No tens insights per compartir encara. Explora més!');
+        return;
+      }
+      const lastDiscovery = discoveries[discoveries.length - 1];
+      shareDiscovery(lastDiscovery.text, lastDiscovery.category);
+    });
+
+    // NEW: Explore style change
+    document.getElementById('exploreStyle').addEventListener('change', () => {
+      if (selectedMode === 'neuroexplora') {
+        initNeuroExplora();
+      }
+    });
+
+    // ═══════════════════════════════════════════════════════════════
+    // PWA SERVICE WORKER REGISTRATION
+    // ═══════════════════════════════════════════════════════════════
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').then(registration => {
+          console.log('SW registered:', registration);
+        }).catch(err => {
+          console.log('SW registration failed:', err);
+        });
+      });
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // INITIALIZATION
+    // ═══════════════════════════════════════════════════════════════
+    function init() {
+      // Set daily challenge
+      const dailyChallenge = getDailyChallenge();
+      document.getElementById('dailyChallengeText').innerText = dailyChallenge;
+
+      // Initialize dashboard
+      updateDashboard();
+      
+      // Set initial mode
+      setMode('viva');
+      
+      // Set initial volume
+      setVolume(currentVolume);
+      
+      // Set initial status
+      setStatus('Entrada en espera.');
+      
+      // Update stats
+      updateStatsDisplay();
+
+      // Log version
+      console.log('%cNeuroFriction v5', 'color: #37f3c0; font-size: 20px; font-weight: bold;');
+      console.log('%cCarregat amb èxit. Totes les funcions actives.', 'color: #f3ff4b;');
+    }
+
+    // Run initialization when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
+  </script>
+</body>
+</html>
