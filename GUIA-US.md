@@ -1,6 +1,27 @@
 # 📖 Guia d'Ús Ràpida - NeuroFriction v5
 
-## 🎯 Pas 1: Descarregar l'App
+---
+
+## ⚠️ MOLT IMPORTANT: DESCARREGA LA VERSIÓ CORRECTA!
+
+### ✅ ARXIU CORRECTE: `neurofriction-5.html`
+
+Aquest és l'arxiu que necessites! Té TOTES les funcionalitats noves.
+
+### ❌ NO UTILITZIS: `neurofriction-3.html`
+
+Aquest és l'arxiu antic (versió 3). No té:
+- ❌ Mode NeuroExplora (96 píndoles)
+- ❌ Repetició espaiada
+- ❌ Export/Import
+- ❌ Editor de píndoles
+- ❌ I molt més!
+
+**→ Sempre busca i descarrega `neurofriction-5.html`!**
+
+---
+
+## 🎯 Pas 1: Descarregar l'App (VERSIÓ 5!)
 
 ### Des de GitHub:
 

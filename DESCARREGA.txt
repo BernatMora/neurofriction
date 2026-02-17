@@ -5,6 +5,20 @@
 ╚══════════════════════════════════════════════════════════════════╝
 
 
+⚠️⚠️⚠️  MOLT IMPORTANT  ⚠️⚠️⚠️
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                                ┃
+┃  ✅  ARXIU CORRECTE: neurofriction-5.html                     ┃
+┃                                                                ┃
+┃  ❌  NO UTILITZIS:   neurofriction-3.html (versió antiga)     ┃
+┃                                                                ┃
+┃  La versió 5 té TOTES les funcionalitats noves!               ┃
+┃  (NeuroExplora, repetició espaiada, dashboard, etc.)          ┃
+┃                                                                ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃                    OPCIÓ 1: ÚS IMMEDIAT                        ┃
 ┃                    (LA MÉS FÀCIL! 🎯)                          ┃
@@ -20,9 +34,9 @@
          ↓
     📁 Carpeta amb arxius
          │
-         │  3. Localitza "neurofriction-5.html"
+         │  3. ⚠️  BUSCA "neurofriction-5.html" (NO la 3!)
          ↓
-    📄 neurofriction-5.html
+    📄 neurofriction-5.html  ← ✅ AQUESTA!
          │
          │  4. Fes doble clic (o clic dret → Obrir amb → Navegador)
          ↓

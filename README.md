@@ -2,6 +2,25 @@
 
 Aplicació d'entrenament neuronal amb àudio binaural, reptes cognitius i exploració de coneixement.
 
+---
+
+## ⚠️ IMPORTANT: UTILITZA LA VERSIÓ 5!
+
+> 🎯 **DESCARREGA I USA:** `neurofriction-5.html` ← **AQUESTA ÉS LA VERSIÓ CORRECTA!**
+> 
+> ❌ **NO UTILITZIS:** `neurofriction-3.html` (versió antiga, sense funcions noves)
+>
+> La versió 5 inclou TOTES les funcionalitats:
+> - ✅ Mode NeuroExplora amb 96 píndoles de coneixement
+> - ✅ Sistema de repetició espaiada
+> - ✅ Export/Import de dades
+> - ✅ Editor de píndoles personalitzades
+> - ✅ Feedback hàptic
+> - ✅ Dashboard de progrés
+> - ✅ Repte diari i molt més!
+
+---
+
 ## 🚀 Com Utilitzar l'App
 
 ### Opció 1: Ús Local (Més Fàcil)
@@ -63,6 +82,22 @@ Per una millor experiència PWA, pots crear:
 - `icon-512.png` - Icona 512x512px
 
 Pots crear aquestes icones amb [PWA Builder](https://www.pwabuilder.com/) o [RealFaviconGenerator](https://realfavicongenerator.net/).
+
+## 🆚 Comparació de Versions
+
+| Característica | v3 (antiga) | v5 (nova) ✨ |
+|----------------|-------------|--------------|
+| Modes bàsics | ✅ 6 modes | ✅ 7 modes |
+| NeuroExplora | ❌ | ✅ 96 píndoles |
+| Repetició espaiada | ❌ | ✅ |
+| Export/Import dades | ❌ | ✅ |
+| Editor píndoles | ❌ | ✅ |
+| Feedback hàptic | ❌ | ✅ |
+| Dashboard progrés | ❌ | ✅ |
+| Repte diari | ❌ | ✅ |
+| PWA complet | ⚠️ Bàsic | ✅ Complet |
+
+**→ Utilitza sempre `neurofriction-5.html` per accedir a totes les funcionalitats!**
 
 ## Modes Disponibles
 
@@ -135,6 +170,20 @@ Si tens problemes o preguntes:
 - Revisa la [documentació tècnica](README.md)
 - Comprova que tens la versió 5 (`neurofriction-5.html`)
 - Prova amb un altre navegador
+
+## ❓ Per què hi ha dues versions?
+
+**neurofriction-3.html** (antiga)
+- Versió original amb funcionalitats bàsiques
+- Es manté per compatibilitat amb usuaris que ja l'utilitzen
+- ⚠️ No té les funcionalitats noves
+
+**neurofriction-5.html** (ACTUAL) ✨
+- Versió completa amb totes les funcionalitats
+- Inclou 10 funcions noves
+- ✅ **És la que has d'utilitzar!**
+
+> 💡 Si ja utilitzaves la v3, pots exportar les teves dades i importar-les a la v5.
 
 ## Llicència
 
