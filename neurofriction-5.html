@@ -799,7 +799,7 @@
 
       <div class="section hide" id="opinionSection">
         <h3>Antibiais Brutal</h3>
-        <label>🧠 Escriu una opinio que defenses</label>
+        <label>🧠 Escriu una opinió que defenses</label>
         <textarea id="opinionInput" placeholder="Ex: El treball remot baixa la productivitat..."></textarea>
       </div>
 
@@ -2051,26 +2051,23 @@
       const totalSessions = sessions.length;
       const totalPills = Object.keys(loadReviews()).length;
       const totalDiscoveries = loadDiscoveries().length;
-      const currentStreak = history.streak || 0;
       
-      // Update dashboard display elements if they exist
-      const sessionsEl = document.getElementById('dashboardSessions');
-      const pillsEl = document.getElementById('dashboardPills');
-      const discoveriesEl = document.getElementById('dashboardDiscoveries');
-      const streakEl = document.getElementById('dashboardStreak');
+      // Update dashboard display elements with correct IDs
+      const sessionsEl = document.getElementById('dashSessionsTotal');
+      const pillsEl = document.getElementById('dashPillsViewed');
+      const discoveriesEl = document.getElementById('dashInsightsSaved');
       
       if (sessionsEl) sessionsEl.innerText = totalSessions;
       if (pillsEl) pillsEl.innerText = totalPills;
       if (discoveriesEl) discoveriesEl.innerText = totalDiscoveries;
-      if (streakEl) streakEl.innerText = currentStreak;
       
-      // Update session bars
-      const barsContainer = document.getElementById('sessionBars');
+      // Update activity chart bars
+      const barsContainer = document.getElementById('activityChart');
       if (barsContainer) {
         barsContainer.innerHTML = '';
         last14.forEach(session => {
           const bar = document.createElement('div');
-          bar.className = 'session-bar';
+          bar.className = 'chart-bar';
           const height = Math.min(100, (session.score || 0) * 10);
           bar.style.height = height + '%';
           bar.title = `${session.date}: ${session.score || 0} punts`;
@@ -2281,7 +2278,7 @@
       if (selectedMode === 'antibiais') {
         const opinion = document.getElementById('opinionInput').value.trim();
         if (!opinion) {
-          alert('Escriu una opinio abans d entrar en Antibiais Brutal.');
+          alert('Escriu una opinió abans d\'entrar en Antibiais Brutal.');
           return;
         }
       }
@@ -2598,7 +2595,7 @@
     // ═══════════════════════════════════════════════════════════════
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').then(registration => {
+        navigator.serviceWorker.register('sw.js').then(registration => {
           console.log('SW registered:', registration);
         }).catch(err => {
           console.log('SW registration failed:', err);
