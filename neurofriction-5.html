@@ -1015,6 +1015,49 @@
       high: { alphaHz: 10, betaHz: 18, gammaHz: 42, breathRate: 0.14, gammaLen: 45 }
     };
 
+    const modeDescriptions = {
+      viva: 'Sessio viva: el sistema muta microfrequencies i fases. Repte emergent, sense avisar.',
+      nocontrol: 'No pots pausar, no veus el temps i no saps quan acaba. Rendicio cognitiva.',
+      antibiais: 'Escrius una opinio i el sistema t obliga a destruir-la. Gamma breu i final en silenci.',
+      insight: 'Gamma molt curta + theta llarg. Repte absurd per provocar "aha".',
+      claredat: 'Progressió alfa→beta→gamma per potenciar claredat mental i intel·ligència fluida.',
+      superior: 'Protocol avançat: theta-gamma coupling real + reptes cognitius actius + seguiment progressiu.',
+      neuroexplora: 'Mode d\'exploració de coneixement: descobreix píndoles intel·lectuals amb àudio dinàmic i repetició espaiada.'
+    };
+
+    const reportSeeds = {
+      resilience: [
+        'Has resistit be la friccio.',
+        'Has sostingut la tensio sense perdre el pols.',
+        'La resistencia ha estat estable.'
+      ],
+      clarity: [
+        'La claredat ha aparegut despres del silenci.',
+        'La claredat ha entrat quan has deixat d anticipar.',
+        'La claredat ha pujat en els canvis lents.'
+      ],
+      transitions: [
+        'Tens millor resposta en transicions lentes.',
+        'Et beneficia la ruptura sobtada de patrons.',
+        'La teva ment respon quan no pot preveure el seguent pas.'
+      ],
+      keys: [
+        'La propera sessio hauria de ser mes curta.',
+        'La propera sessio hauria de tenir un silenci mes llarg.',
+        'La propera sessio pot tenir menys intensitat i mes respiracio.'
+      ],
+      intelligence: [
+        'La sincronització alfa-gamma ha estat notable.',
+        'La intel·ligència fluida respon bé a la progressió de freqüències.',
+        'El coupling hemisféric ha millorat durant les fases beta.'
+      ],
+      superior: [
+        'El theta-gamma coupling ha creat patrons d\'activitat similars als cervells d\'alt rendiment.',
+        'Les ones gamma niuades dins theta han activat la memòria de treball en profunditat.',
+        'La sincronització cross-frequency ha estat estable durant tota la sessió.'
+      ]
+    };
+
 
     // ═══════════════════════════════════════════════════════════════
     // CORE UTILITY FUNCTIONS
@@ -1996,6 +2039,44 @@
       if (navigator.clipboard) {
         navigator.clipboard.writeText(text).then(() => { haptic('medium'); pushMessage('Copiat al portapapers!', 'hint'); });
       } else { alert('Text per compartir:\n\n' + text); }
+    }
+
+    function updateDashboard() {
+      // Update session history chart
+      const history = loadHistory();
+      const sessions = history.sessions || [];
+      const last14 = sessions.slice(-14);
+      
+      // Update counters
+      const totalSessions = sessions.length;
+      const totalPills = Object.keys(loadReviews()).length;
+      const totalDiscoveries = loadDiscoveries().length;
+      const currentStreak = history.streak || 0;
+      
+      // Update dashboard display elements if they exist
+      const sessionsEl = document.getElementById('dashboardSessions');
+      const pillsEl = document.getElementById('dashboardPills');
+      const discoveriesEl = document.getElementById('dashboardDiscoveries');
+      const streakEl = document.getElementById('dashboardStreak');
+      
+      if (sessionsEl) sessionsEl.innerText = totalSessions;
+      if (pillsEl) pillsEl.innerText = totalPills;
+      if (discoveriesEl) discoveriesEl.innerText = totalDiscoveries;
+      if (streakEl) streakEl.innerText = currentStreak;
+      
+      // Update session bars
+      const barsContainer = document.getElementById('sessionBars');
+      if (barsContainer) {
+        barsContainer.innerHTML = '';
+        last14.forEach(session => {
+          const bar = document.createElement('div');
+          bar.className = 'session-bar';
+          const height = Math.min(100, (session.score || 0) * 10);
+          bar.style.height = height + '%';
+          bar.title = `${session.date}: ${session.score || 0} punts`;
+          barsContainer.appendChild(bar);
+        });
+      }
     }
 
     function getDailyChallenge() {
