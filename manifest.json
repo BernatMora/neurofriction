@@ -1,0 +1,22 @@
+{
+  "name": "NeuroFriction",
+  "short_name": "NeuroFriction",
+  "start_url": "neurofriction-5.html",
+  "display": "standalone",
+  "background_color": "#050608",
+  "theme_color": "#050608",
+  "orientation": "portrait",
+  "description": "Entrenament neuronal amb soroll rosa, binaural beats i fricció cognitiva",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

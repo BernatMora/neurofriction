@@ -1,0 +1,72 @@
+╔═══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║                   ⚠️  LLEGEIX AIXÒ PRIMER  ⚠️                 ║
+║                                                               ║
+╚═══════════════════════════════════════════════════════════════╝
+
+
+Has descarregat el repositori NeuroFriction!
+
+Ara has de saber QUIN ARXIU utilitzar:
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                              ┃
+┃   ✅  USA AQUEST ARXIU:                                     ┃
+┃                                                              ┃
+┃        📄 neurofriction-5.html                              ┃
+┃                                                              ┃
+┃   Aquest és l'arxiu COMPLET amb TOTES les funcions:         ┃
+┃   • Mode NeuroExplora (96 píndoles)                         ┃
+┃   • Repetició espaiada                                      ┃
+┃   • Export/Import                                           ┃
+┃   • Dashboard de progrés                                    ┃
+┃   • Feedback hàptic                                         ┃
+┃   • Editor de píndoles                                      ┃
+┃   • Repte diari                                             ┃
+┃   • I molt més!                                             ┃
+┃                                                              ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                              ┃
+┃   ❌  NO UTILITZIS:                                         ┃
+┃                                                              ┃
+┃        📄 neurofriction-3.html                              ┃
+┃                                                              ┃
+┃   Aquest és l'arxiu ANTIC (versió 3).                       ┃
+┃   Només té les funcions bàsiques.                           ┃
+┃   Es manté per compatibilitat amb usuaris antics.           ┃
+┃                                                              ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+
+═══════════════════════════════════════════════════════════════
+
+RESUM RÀPID:
+
+  1. 📂 Estàs a la carpeta del repositori descarregat
+  
+  2. 👀 Busca l'arxiu: neurofriction-5.html
+  
+  3. 🖱️  Fes doble clic per obrir-lo amb el navegador
+  
+  4. 🎧 Connecta auriculars
+  
+  5. ▶️  Fes clic a "Iniciar" i gaudeix!
+
+═══════════════════════════════════════════════════════════════
+
+📚 DOCUMENTACIÓ COMPLETA:
+
+  • README.md → Instruccions generals
+  • GUIA-US.md → Guia pas a pas detallada
+  • DESCARREGA.txt → Diagrames visuals
+
+═══════════════════════════════════════════════════════════════
+
+💡 CONSELL: Si ja utilitzaves la versió 3, pots exportar les
+   teves dades des de v3 i importar-les a v5 per no perdre res!
+
+═══════════════════════════════════════════════════════════════

@@ -1,0 +1,149 @@
+╔══════════════════════════════════════════════════════════════════╗
+║                                                                  ║
+║     COM DESCARREGAR I UTILITZAR NEUROFRICTION v5                ║
+║                                                                  ║
+╚══════════════════════════════════════════════════════════════════╝
+
+
+⚠️⚠️⚠️  MOLT IMPORTANT  ⚠️⚠️⚠️
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                                ┃
+┃  ✅  ARXIU CORRECTE: neurofriction-5.html                     ┃
+┃                                                                ┃
+┃  ❌  NO UTILITZIS:   neurofriction-3.html (versió antiga)     ┃
+┃                                                                ┃
+┃  La versió 5 té TOTES les funcionalitats noves!               ┃
+┃  (NeuroExplora, repetició espaiada, dashboard, etc.)          ┃
+┃                                                                ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                    OPCIÓ 1: ÚS IMMEDIAT                        ┃
+┃                    (LA MÉS FÀCIL! 🎯)                          ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+    GitHub Repository
+         │
+         │  1. Fes clic a "Code" → "Download ZIP"
+         ↓
+    📦 neurofriction.zip
+         │
+         │  2. Descomprimeix l'arxiu
+         ↓
+    📁 Carpeta amb arxius
+         │
+         │  3. ⚠️  BUSCA "neurofriction-5.html" (NO la 3!)
+         ↓
+    📄 neurofriction-5.html  ← ✅ AQUESTA!
+         │
+         │  4. Fes doble clic (o clic dret → Obrir amb → Navegador)
+         ↓
+    🌐 Navegador Web
+         │
+         │  5. Connecta auriculars 🎧
+         ↓
+    ▶️  FES CLIC A "INICIAR"
+         │
+         ↓
+    🧠 GAUDEIX DE L'EXPERIÈNCIA!
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                OPCIÓ 2: INSTAL·LAR COM A APP                   ┃
+┃               (Millor experiència! 📱💻)                       ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+   📱 EN MÒBIL (Android):
+   ───────────────────────
+   
+   1. Obre neurofriction-5.html amb Chrome
+   2. Toca els 3 punts (⋮) al menú
+   3. Selecciona "Afegeix a la pantalla d'inici"
+   4. Toca "Afegir"
+   
+   ✨ Ara tens una icona a la pantalla!
+   
+
+   📱 EN MÒBIL (iOS):
+   ─────────────────
+   
+   1. Obre neurofriction-5.html amb Safari
+   2. Toca el botó de compartir ()
+   3. Desplaça't avall
+   4. Toca "Afegeix a l'inici"
+   5. Toca "Afegir"
+   
+   ✨ Apareixerà com una app nativa!
+   
+
+   💻 EN ORDINADOR:
+   ────────────────
+   
+   1. Obre neurofriction-5.html amb Chrome o Edge
+   2. Cerca la icona ⊕ o ⬇ a la barra d'adreces
+   3. Fes clic a "Instal·la NeuroFriction"
+   
+   ✨ S'obrirà com una finestra independent!
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃              OPCIÓ 3: USAR DES DE LA WEB                       ┃
+┃             (Per compartir o usar en línia! 🌐)               ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+   A) GitHub Pages (Gratuït):
+   ──────────────────────────
+   
+   • Puja els arxius al teu repositori de GitHub
+   • Activa GitHub Pages a Settings → Pages
+   • Accedeix a: https://usuari.github.io/repo/neurofriction-5.html
+   
+
+   B) Netlify Drop (Gratuït):
+   ─────────────────────────
+   
+   • Ves a https://app.netlify.com/drop
+   • Arrossega la carpeta amb els arxius
+   • Obtindràs una URL pública automàticament
+   
+
+   C) Google Drive:
+   ───────────────
+   
+   • Puja els arxius a Google Drive
+   • Comparteix amb "Qualsevol amb l'enllaç"
+   • Accedeix des de qualsevol dispositiu
+
+
+═══════════════════════════════════════════════════════════════════
+
+⚠️  IMPORTANT - REQUISITS MÍNIMS:
+
+    ✅ Navegador modern (Chrome, Firefox, Safari, Edge)
+    ✅ Auriculars (essencial per àudio binaural!)
+    ✅ Permís per reproduir àudio
+    ✅ JavaScript habilitat
+
+═══════════════════════════════════════════════════════════════════
+
+🎯 RECOMANACIONS:
+
+    💡 Primera vegada? → Prova "NeuroExplora" o "Sessió Viva"
+    ⏱️  Comença amb sessions de 10-15 minuts
+    🔊 Ajusta el volum gradualment
+    👀 Tanca els ulls per millor immersió
+    📊 Les dades es guarden automàticament
+
+═══════════════════════════════════════════════════════════════════
+
+📚 MÉS INFORMACIÓ:
+
+    • README.md → Instruccions completes
+    • GUIA-US.md → Guia pas a pas detallada
+
+═══════════════════════════════════════════════════════════════════
+
+✨ Gaudeix de l'experiència NeuroFriction! ✨
+
