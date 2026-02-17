@@ -720,7 +720,7 @@
       <div class="hero-tag">NeuroFriction v5 · Mode Flipar + NeuroExplora</div>
       <h1>Entra → el sistema et llegeix → et transforma → surts diferent</h1>
       <p>
-        Sessio viva i mutante: soroll rosa + binaural amb microcanvis, friccio cognitiva emergent i feedback simbolic.
+        Sessió viva i mutant: soroll rosa + binaural amb microcanvis, fricció cognitiva emergent i feedback simbòlic.
         No hi ha loops exactes. Hi ha desajust, plasticitat i una mica de provocacio controlada. Ara amb NeuroExplora, spaced repetition i més.
       </p>
     </header>
@@ -733,7 +733,7 @@
       <div class="section">
         <h3>Canvi de paradigma</h3>
         <p style="margin:0; opacity:0.85;">
-          Ja no es "tria una frequencia i un repte". Ara es "entra → el sistema et llegeix → et transforma → surts diferent".
+          Ja no es "tria una freqüència i un repte". Ara es "entra → el sistema et llegeix → et transforma → surts diferent".
         </p>
         <p style="margin:0.7rem 0 0; opacity:0.75;">
           Regla d'or: <strong>mai loops exactes</strong>. El cervell deixa de predir i s'obre a noves vies.
@@ -741,9 +741,9 @@
       </div>
 
       <div class="section">
-        <h3>Sessio viva (mutant)</h3>
+        <h3>Sessió viva (mutant)</h3>
         <p style="margin:0; opacity:0.85;">
-          Arquitectura sonora: base de soroll rosa + binaural. Cada 30–60 s hi ha microcanvis de frequencia (±0.13 Hz),
+          Arquitectura sonora: base de soroll rosa + binaural. Cada 30–60 s hi ha microcanvis de freqüència (±0.13 Hz),
           microcanvis de fase L/R i respiracio sonora lenta (AM 0.1 Hz).
         </p>
       </div>
@@ -751,7 +751,7 @@
       <div class="section">
         <h3>Tria el mode del sistema</h3>
         <div class="mode-grid" id="modeGrid">
-          <button class="mode-card active" data-mode="viva">Sessio viva</button>
+          <button class="mode-card active" data-mode="viva">Sessió viva</button>
           <button class="mode-card" data-mode="nocontrol">Mode No-Control</button>
           <button class="mode-card" data-mode="antibiais">Antibiais Brutal</button>
           <button class="mode-card" data-mode="insight">Insight Asimetric</button>
@@ -764,7 +764,7 @@
 
       <div class="section">
         <h3>Parametres minims</h3>
-        <label>🎚 Intensitat de friccio</label>
+        <label>🎚 Intensitat de fricció</label>
         <select id="intensity">
           <option value="low">Baixa · mes suau</option>
           <option value="mid" selected>Mitja · equilibrada</option>
@@ -840,7 +840,7 @@
       </div>
 
       <div class="section">
-        <h3>Friccio cognitiva emergent</h3>
+        <h3>Fricció cognitiva emergent</h3>
         <div class="feed" id="messageFeed"></div>
         <div class="status" id="status">Entrada en espera.</div>
       </div>
@@ -1016,7 +1016,7 @@
     };
 
     const modeDescriptions = {
-      viva: 'Sessio viva: el sistema muta microfrequencies i fases. Repte emergent, sense avisar.',
+      viva: 'Sessió viva: el sistema muta microfreqüències i fases. Repte emergent, sense avisar.',
       nocontrol: 'No pots pausar, no veus el temps i no saps quan acaba. Rendicio cognitiva.',
       antibiais: 'Escrius una opinio i el sistema t obliga a destruir-la. Gamma breu i final en silenci.',
       insight: 'Gamma molt curta + theta llarg. Repte absurd per provocar "aha".',
@@ -1027,7 +1027,7 @@
 
     const reportSeeds = {
       resilience: [
-        'Has resistit be la friccio.',
+        'Has resistit bé la fricció.',
         'Has sostingut la tensio sense perdre el pols.',
         'La resistencia ha estat estable.'
       ],
@@ -2310,7 +2310,7 @@
       clearReport();
       buildAudioGraph(baseBeat);
       setStatus('Sistema calibrant...');
-      pushMessage('Entrada. El sistema t esta llegint.', 'system');
+      pushMessage('Entrada. El sistema t\'està llegint.', 'system');
       haptic('medium');
 
       scheduleMicroShift();
@@ -2343,7 +2343,7 @@
       updateTimer();
       setSessionButtons(true, false);
       startTimerInterval();
-      setStatus('Sessio viva en curs.');
+      setStatus('Sessió viva en curs.');
     }
 
     function pauseSession() {
@@ -2353,7 +2353,7 @@
       if (audioCtx.state === 'running') {
         audioCtx.suspend().catch(err => console.error('Failed to suspend audio context:', err));
       }
-      setStatus('Sessio en pausa.');
+      setStatus('Sessió en pausa.');
       setSessionButtons(true, true);
     }
 
@@ -2363,7 +2363,7 @@
       if (audioCtx.state === 'suspended') {
         audioCtx.resume().catch(err => console.error('Failed to resume audio context:', err));
       }
-      setStatus('Sessio reactivada.');
+      setStatus('Sessió reactivada.');
       setSessionButtons(true, false);
       startTimerInterval();
     }
@@ -2405,7 +2405,7 @@
           updatePhaseBadge('alpha');
           document.getElementById('phaseBadge').textContent = 'COMPLETAT';
         }
-        setStatus('Sessio finalitzada.');
+        setStatus('Sessió finalitzada.');
         generateReport();
         startRitualCountdown();
         haptic('success');
