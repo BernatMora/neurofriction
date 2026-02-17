@@ -1,0 +1,1881 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>NeuroFriction · Mode Flipar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+    :root {
+      color-scheme: dark;
+      --bg-1: #050608;
+      --bg-2: #0c1217;
+      --bg-3: #121b1f;
+      --ink-1: #f8fafc;
+      --ink-2: rgba(248, 250, 252, 0.74);
+      --ink-3: rgba(248, 250, 252, 0.54);
+      --acid: #37f3c0;
+      --electric: #f3ff4b;
+      --lava: #ff8a5b;
+      --shadow: rgba(0, 0, 0, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Space Grotesk', sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(55, 243, 192, 0.12), transparent 55%),
+        radial-gradient(circle at 20% 40%, rgba(255, 138, 91, 0.08), transparent 50%),
+        linear-gradient(160deg, var(--bg-1), var(--bg-2) 55%, var(--bg-3) 100%);
+      color: var(--ink-1);
+      padding: 2.5rem 1.6rem 4rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+      background-size: 120px 120px;
+      opacity: 0.35;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    .app {
+      max-width: 980px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero {
+      display: grid;
+      gap: 1.2rem;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--acid);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+    }
+
+    p {
+      opacity: 0.85;
+      max-width: 780px;
+    }
+
+    .panel {
+      background: rgba(8, 12, 14, 0.86);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 1.8rem;
+      margin-top: 2rem;
+      box-shadow: 0 25px 60px var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .section {
+      margin-top: 1.5rem;
+      padding: 1.2rem;
+      border-radius: 18px;
+      background: rgba(5, 8, 10, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .section h3 {
+      margin: 0 0 0.8rem 0;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--electric);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 600;
+      color: var(--ink-2);
+    }
+
+    input, select, button, textarea {
+      width: 100%;
+      margin-top: 0.4rem;
+      padding: 0.7rem 0.9rem;
+      border-radius: 12px;
+      border: none;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+
+    input, select, textarea {
+      background: rgba(15, 20, 24, 0.9);
+      color: var(--ink-1);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    input[type="range"] {
+      padding: 0.2rem 0.6rem;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+
+    button {
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 0.6rem;
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--acid), var(--electric));
+      color: #050608;
+      box-shadow: 0 18px 35px rgba(55, 243, 192, 0.25);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--ink-1);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .status {
+      margin-top: 1rem;
+      font-weight: 600;
+      color: var(--acid);
+    }
+
+    .timer {
+      font-size: 2.6rem;
+      margin-top: 1.2rem;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    .progress {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 0.6rem;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--electric), var(--acid));
+      transition: width 0.3s ease;
+    }
+
+    .field-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .value-chip {
+      background: rgba(255, 255, 255, 0.12);
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      color: var(--ink-2);
+      white-space: nowrap;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 0.8rem;
+      margin-top: 0.8rem;
+    }
+
+    .mode-card {
+      text-align: left;
+      padding: 0.9rem 1rem;
+      border-radius: 14px;
+      background: rgba(15, 20, 24, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--ink-1);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: none;
+    }
+
+    .mode-card.active {
+      border-color: var(--acid);
+      box-shadow: 0 0 0 2px rgba(55, 243, 192, 0.18);
+    }
+
+    .mode-description {
+      margin-top: 0.8rem;
+      color: var(--ink-2);
+      font-size: 0.95rem;
+    }
+
+    .feed {
+      display: grid;
+      gap: 0.6rem;
+      max-height: 220px;
+      overflow-y: auto;
+      padding-right: 0.3rem;
+    }
+
+    .feed-item {
+      padding: 0.7rem 0.9rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      animation: slideIn 0.45s ease;
+    }
+
+    .feed-item.system {
+      border-left: 3px solid var(--acid);
+    }
+
+    .feed-item.provoke {
+      border-left: 3px solid var(--lava);
+    }
+
+    .feed-item.hint {
+      border-left: 3px solid var(--electric);
+    }
+
+    .report-panel {
+      display: none;
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 16px;
+      background: rgba(15, 20, 24, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .report-panel.active {
+      display: block;
+    }
+
+    .report-list {
+      display: grid;
+      gap: 0.5rem;
+      margin: 0.8rem 0;
+    }
+
+    .key-line {
+      font-weight: 700;
+      color: var(--electric);
+    }
+
+    .hide {
+      display: none !important;
+    }
+
+    .ritual-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 4, 6, 0.95);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      padding: 2rem;
+    }
+
+    .ritual-overlay.active {
+      display: flex;
+    }
+
+    .ritual-card {
+      max-width: 520px;
+      text-align: center;
+      padding: 2rem;
+      border-radius: 20px;
+      background: rgba(10, 12, 15, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
+    }
+
+    .ritual-count {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 2.2rem;
+      margin-top: 1rem;
+      color: var(--acid);
+    }
+
+    footer {
+      margin-top: 3rem;
+      opacity: 0.5;
+      font-size: 0.9rem;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    .challenge-panel {
+      display: none;
+      margin-top: 0.8rem;
+    }
+
+    .challenge-panel.active {
+      display: block;
+    }
+
+    .challenge-question {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.7rem;
+      min-height: 2.2rem;
+      line-height: 1.4;
+    }
+
+    .challenge-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+
+    .challenge-option {
+      padding: 0.55rem 0.7rem;
+      border-radius: 10px;
+      background: rgba(15, 20, 24, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--ink-1);
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      text-transform: none;
+      letter-spacing: 0;
+      font-weight: 500;
+    }
+
+    .challenge-option:hover {
+      border-color: var(--acid);
+      background: rgba(55, 243, 192, 0.08);
+    }
+
+    .challenge-option.correct {
+      border-color: var(--acid);
+      background: rgba(55, 243, 192, 0.18);
+    }
+
+    .challenge-option.wrong {
+      border-color: var(--lava);
+      background: rgba(255, 138, 91, 0.18);
+    }
+
+    .challenge-score {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.6rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.82rem;
+      color: var(--ink-3);
+    }
+
+    .phase-badge {
+      display: inline-block;
+      padding: 0.2rem 0.7rem;
+      border-radius: 999px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+
+    .phase-alpha { background: rgba(55, 243, 192, 0.12); color: var(--acid); }
+    .phase-beta { background: rgba(243, 255, 75, 0.12); color: var(--electric); }
+    .phase-gamma { background: rgba(255, 138, 91, 0.12); color: var(--lava); }
+    .phase-theta { background: rgba(55, 243, 192, 0.08); color: var(--ink-2); }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 0.6rem;
+      margin-top: 0.8rem;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 0.7rem 0.4rem;
+      border-radius: 12px;
+      background: rgba(15, 20, 24, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .stat-value {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--acid);
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      color: var(--ink-3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 0.15rem;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-top: 0.8rem;
+      padding: 0.6rem 0.8rem;
+      border-radius: 12px;
+      background: rgba(15, 20, 24, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .toggle-label {
+      flex: 1;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--ink-2);
+    }
+
+    .toggle-label small {
+      display: block;
+      font-weight: 400;
+      font-size: 0.78rem;
+      color: var(--ink-3);
+      margin-top: 0.15rem;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 48px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+      position: absolute;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.25s;
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      left: 3px;
+      bottom: 3px;
+      background: var(--ink-1);
+      border-radius: 50%;
+      transition: transform 0.25s;
+    }
+
+    .toggle-switch input:checked + .toggle-slider {
+      background: var(--acid);
+    }
+
+    .toggle-switch input:checked + .toggle-slider::before {
+      transform: translateX(22px);
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 2rem 1.2rem 3.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="panel" style="margin-bottom:2.2rem; background:rgba(55,243,192,0.10); border:1.5px solid var(--acid); box-shadow:0 4px 24px rgba(55,243,192,0.10);">
+      <h2 style="margin-top:0; color:var(--acid); font-size:1.25rem; letter-spacing:0.04em;">Protocol diari recomanat (4 setmanes)</h2>
+      <ol style="margin:0; padding-left:1.2em;">
+        <li><b>Setmana 1</b>:<br>
+          <span style="color:var(--ink-2);">Mode: <b>Sessió viva</b> o <b>Claredat Mental</b> · Intensitat: <b>Baixa</b> · Durada: <b>12-15 min</b> · Nivell: 1<br>Objectiu: Adaptació suau, notar sensacions i consolidar hàbit.</span>
+        </li>
+        <li><b>Setmana 2</b>:<br>
+          <span style="color:var(--ink-2);">Mode: <b>Claredat Mental</b> · Intensitat: <b>Mitja</b> · Durada: <b>15-18 min</b> · Nivell: 1-2<br>Objectiu: Millorar claredat, començar a fer autoavaluació després de cada sessió.</span>
+        </li>
+        <li><b>Setmana 3</b>:<br>
+          <span style="color:var(--ink-2);">Mode: <b>Ment Superior</b> (activa Mode Feina si treballes) · Intensitat: <b>Mitja</b> · Durada: <b>18-22 min</b> · Nivell: 2-3<br>Objectiu: Entrenament cognitiu actiu, començar a notar millores en focus i resposta als reptes.</span>
+        </li>
+        <li><b>Setmana 4</b>:<br>
+          <span style="color:var(--ink-2);">Mode: <b>Ment Superior</b> o <b>Antibiais Brutal</b> (1-2 cops/setmana) · Intensitat: <b>Alta</b> (si et sents preparat) · Durada: <b>20-25 min</b> · Nivell: 3+<br>Objectiu: Optimitzar plasticitat, flexibilitat cognitiva i consolidar resultats.</span>
+        </li>
+      </ol>
+      <ul style="margin:1.1em 0 0 1.2em; color:var(--ink-3); font-size:0.98em;">
+        <li>Fes <b>4-5 sessions/setmana</b> per màxim resultat.</li>
+        <li>Després de cada sessió, espera el ritual de tancament i escriu una idea o sensació.</li>
+        <li>Si tens poc temps, fes <b>Mode Feina</b> mentre treballes (entrenament passiu).</li>
+        <li>Autoavalua't honestament (slider 1-5) per ajustar la intensitat.</li>
+        <li>Si un dia et notes saturat, baixa intensitat o fes una sessió més curta.</li>
+      </ul>
+      <div style="margin-top:0.7em; color:var(--electric); font-size:0.97em;">Recorda: la clau és la <b>consistència</b>, no la perfecció. El progrés és acumulatiu!</div>
+    </section>
+    <header class="hero">
+      <div class="hero-tag">NeuroFriction · Mode Flipar</div>
+      <h1>Entra → el sistema et llegeix → et transforma → surts diferent</h1>
+      <p>
+        Sessio viva i mutante: soroll rosa + binaural amb microcanvis, friccio cognitiva emergent i feedback simbolic.
+        No hi ha loops exactes. Hi ha desajust, plasticitat i una mica de provocacio controlada.
+      </p>
+    </header>
+
+    <section class="panel">
+      <p class="status" style="color:var(--ink-2); font-weight:600;">
+        Avis: aquesta app no substitueix assessorament medic. Manten volum moderat i usa auriculars.
+      </p>
+
+      <div class="section">
+        <h3>Canvi de paradigma</h3>
+        <p style="margin:0; opacity:0.85;">
+          Ja no es "tria una frequencia i un repte". Ara es "entra → el sistema et llegeix → et transforma → surts diferent".
+        </p>
+        <p style="margin:0.7rem 0 0; opacity:0.75;">
+          Regla d'or: <strong>mai loops exactes</strong>. El cervell deixa de predir i s'obre a noves vies.
+        </p>
+      </div>
+
+      <div class="section">
+        <h3>Sessio viva (mutant)</h3>
+        <p style="margin:0; opacity:0.85;">
+          Arquitectura sonora: base de soroll rosa + binaural. Cada 30–60 s hi ha microcanvis de frequencia (±0.13 Hz),
+          microcanvis de fase L/R i respiracio sonora lenta (AM 0.1 Hz).
+        </p>
+      </div>
+
+      <div class="section">
+        <h3>Tria el mode del sistema</h3>
+        <div class="mode-grid" id="modeGrid">
+          <button class="mode-card active" data-mode="viva">Sessio viva</button>
+          <button class="mode-card" data-mode="nocontrol">Mode No-Control</button>
+          <button class="mode-card" data-mode="antibiais">Antibiais Brutal</button>
+          <button class="mode-card" data-mode="insight">Insight Asimetric</button>
+          <button class="mode-card" data-mode="claredat">Claredat Mental</button>
+          <button class="mode-card" data-mode="superior">🧬 Ment Superior</button>
+        </div>
+        <div class="mode-description" id="modeDescription"></div>
+      </div>
+
+      <div class="section">
+        <h3>Parametres minims</h3>
+        <label>🎚 Intensitat de friccio</label>
+        <select id="intensity">
+          <option value="low">Baixa · mes suau</option>
+          <option value="mid" selected>Mitja · equilibrada</option>
+          <option value="high">Alta · provocadora</option>
+        </select>
+
+        <div id="durationRow">
+          <label>⏱ Durada (minuts)</label>
+          <input id="duration" type="number" min="5" max="60" value="18" />
+        </div>
+
+        <div id="noControlRow" class="hide">
+          <label>⏳ Finestra de durada (min–max, minuts)</label>
+          <div class="field-row">
+            <input id="minDuration" type="number" min="5" max="20" value="8" />
+            <input id="maxDuration" type="number" min="10" max="30" value="18" />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <label style="margin-top:0;">🔊 Volum</label>
+          <span class="value-chip" id="volumeValue">30%</span>
+        </div>
+        <input id="volume" type="range" min="0" max="0.6" step="0.01" value="0.18" />
+
+        <div class="field-row">
+          <label style="margin-top:0;">🧩 Autoavaluacio (1–5)</label>
+          <span class="value-chip" id="ratingValue">3/5</span>
+        </div>
+        <input id="selfRating" type="range" min="1" max="5" step="1" value="3" />
+      </div>
+
+      <div class="section hide" id="opinionSection">
+        <h3>Antibiais Brutal</h3>
+        <label>🧠 Escriu una opinio que defenses</label>
+        <textarea id="opinionInput" placeholder="Ex: El treball remot baixa la productivitat..."></textarea>
+      </div>
+
+      <div class="section hide" id="challengeSection">
+        <h3>🧬 Entrenament Cognitiu</h3>
+        <div class="toggle-row" id="workModeRow">
+          <div class="toggle-label">
+            🏗️ Mode Feina
+            <small>Desactiva reptes. La teva feina és el repte cognitiu real.</small>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="workModeToggle" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div id="phaseBadge" class="phase-badge phase-alpha">EN ESPERA</div>
+        <div class="challenge-panel" id="challengePanel">
+          <div class="challenge-question" id="challengeQ"></div>
+          <div class="challenge-options" id="challengeOpts"></div>
+        </div>
+        <div class="challenge-score">
+          <span>Encerts: <strong id="challengeScore">0</strong></span>
+          <span>Nivell: <strong id="challengeLevel">1</strong></span>
+          <span>Ratxa: <strong id="challengeStreak">0</strong></span>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Friccio cognitiva emergent</h3>
+        <div class="feed" id="messageFeed"></div>
+        <div class="status" id="status">Entrada en espera.</div>
+      </div>
+
+      <div class="section">
+        <h3>Controls</h3>
+        <div class="button-row">
+          <button id="startBtn" class="btn-primary">Entrar</button>
+          <button id="pauseBtn" type="button" class="btn-secondary" disabled>Pausa</button>
+          <button id="resumeBtn" type="button" class="btn-secondary" disabled>Retornar</button>
+          <button id="stopBtn" type="button" class="btn-secondary" disabled>Sortida segura</button>
+        </div>
+        <div class="timer" id="timer">00:00</div>
+        <div class="progress" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
+      </div>
+
+      <div class="section">
+        <h3>IA narrativa</h3>
+        <div class="report-panel" id="reportPanel">
+          <div class="report-list" id="reportList"></div>
+          <div class="key-line" id="reportKey"></div>
+        </div>
+      </div>
+
+      <div class="section hide" id="statsSection">
+        <h3>📊 Historial Ment Superior</h3>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="statSessions">0</div>
+            <div class="stat-label">Sessions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statStreak">0</div>
+            <div class="stat-label">Dies seguits</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statLevel">1</div>
+            <div class="stat-label">Nivell</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statBestScore">0</div>
+            <div class="stat-label">Millor puntuació</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      NeuroFriction Lab · prototip experimental · usa auriculars
+    </footer>
+  </main>
+
+  <div class="ritual-overlay" id="ritualOverlay" aria-hidden="true">
+    <div class="ritual-card">
+      <h2 style="margin-top:0;">No tornis immediatament a estimuls</h2>
+      <p style="opacity:0.75;">Respira i deixa que el cervell consolidi el canvi.</p>
+      <div class="ritual-count" id="ritualCountdown">30</div>
+      <button id="ritualClose" class="btn-secondary" disabled>Tancar</button>
+    </div>
+  </div>
+
+  <script>
+    let audioCtx;
+    let leftOsc, rightOsc, noise;
+    let masterGain, breathLfo, breathDepth;
+    let leftDelay, rightDelay, leftPan, rightPan;
+    let timerInterval;
+    let microShiftTimeout;
+    let silenceTimeout;
+    let ritualInterval;
+    let messageTimeouts = [];
+    let isPaused = false;
+    let sessionActive = false;
+    let currentVolume = 0.18;
+    let baseBeat = 8;
+    let totalSessionSeconds = 0;
+    let remainingSessionSeconds = 0;
+    let selectedMode = 'viva';
+    let allowPause = true;
+    let showTimer = true;
+    let workMode = false;
+    const baseFreq = 220;
+
+    const intensityProfiles = {
+      low: { beat: 6, dipDepth: 0.2 },
+      mid: { beat: 9, dipDepth: 0.3 },
+      high: { beat: 12, dipDepth: 0.4 }
+    };
+
+    const clarityProfiles = {
+      low:  { alphaHz: 10, betaHz: 14, gammaHz: 38, breathRate: 0.10, gammaLen: 25 },
+      mid:  { alphaHz: 10, betaHz: 16, gammaHz: 40, breathRate: 0.12, gammaLen: 35 },
+      high: { alphaHz: 10, betaHz: 18, gammaHz: 42, breathRate: 0.14, gammaLen: 45 }
+    };
+
+    const modeDescriptions = {
+      viva: 'Sessio viva: el sistema muta microfrequencies i fases. Repte emergent, sense avisar.',
+      nocontrol: 'No pots pausar, no veus el temps i no saps quan acaba. Rendicio cognitiva.',
+      antibiais: 'Escrius una opinio i el sistema t obliga a destruir-la. Gamma breu i final en silenci.',
+      insight: 'Gamma molt curta + theta llarg. Repte absurd per provocar "aha".',
+      claredat: 'Progressió alfa→beta→gamma per potenciar claredat mental i intel·ligència fluida. Exercicis cognitius integrats.',
+      superior: 'Protocol avançat: theta-gamma coupling real + reptes cognitius actius + seguiment progressiu. Entrenament d\'intel·ligència fluida amb neurociència. Activa Mode Feina per usar-lo mentre treballes.'
+    };
+
+    const reportSeeds = {
+      resilience: [
+        'Has resistit be la friccio.',
+        'Has sostingut la tensio sense perdre el pols.',
+        'La resistencia ha estat estable.'
+      ],
+      clarity: [
+        'La claredat ha aparegut despres del silenci.',
+        'La claredat ha entrat quan has deixat d anticipar.',
+        'La claredat ha pujat en els canvis lents.'
+      ],
+      transitions: [
+        'Tens millor resposta en transicions lentes.',
+        'Et beneficia la ruptura sobtada de patrons.',
+        'La teva ment respon quan no pot preveure el seguent pas.'
+      ],
+      keys: [
+        'La propera sessio hauria de ser mes curta.',
+        'La propera sessio hauria de tenir un silenci mes llarg.',
+        'La propera sessio pot tenir menys intensitat i mes respiracio.'
+      ],
+      intelligence: [
+        'La sincronització alfa-gamma ha estat notable.',
+        'La intel·ligència fluida respon bé a la progressió de freqüències.',
+        'El coupling hemisféric ha millorat durant les fases beta.'
+      ],
+      superior: [
+        'El theta-gamma coupling ha creat patrons d\'activitat similars als cervells d\'alt rendiment.',
+        'Les ones gamma niuades dins theta han activat la memòria de treball en profunditat.',
+        'La sincronització cross-frequency ha estat estable durant tota la sessió.'
+      ]
+    };
+
+    function clampVolume(value) {
+      return Math.min(0.6, Math.max(0, value));
+    }
+
+    function randomBetween(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function setVolume(value) {
+      currentVolume = clampVolume(value);
+      document.getElementById('volumeValue').innerText = `${Math.round((currentVolume / 0.6) * 100)}%`;
+      if (masterGain && audioCtx && audioCtx.state !== 'closed') {
+        masterGain.gain.setTargetAtTime(currentVolume, audioCtx.currentTime, 0.3);
+      }
+      if (breathDepth && audioCtx && audioCtx.state !== 'closed') {
+        breathDepth.gain.setTargetAtTime(currentVolume * 0.18, audioCtx.currentTime, 0.3);
+      }
+    }
+
+    function setStatus(text) {
+      document.getElementById('status').innerText = text;
+    }
+
+    function pushMessage(text, tone = 'system') {
+      const feed = document.getElementById('messageFeed');
+      const item = document.createElement('div');
+      item.className = `feed-item ${tone}`;
+      item.textContent = text;
+      feed.appendChild(item);
+      feed.scrollTop = feed.scrollHeight;
+    }
+
+    function clearFeed() {
+      const feed = document.getElementById('messageFeed');
+      feed.innerHTML = '';
+    }
+
+    function clearReport() {
+      const panel = document.getElementById('reportPanel');
+      panel.classList.remove('active');
+      document.getElementById('reportList').innerHTML = '';
+      document.getElementById('reportKey').innerText = '';
+    }
+
+    function setMode(mode) {
+      selectedMode = mode;
+      document.querySelectorAll('.mode-card').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mode === mode);
+      });
+      document.getElementById('modeDescription').innerText = modeDescriptions[mode] || '';
+
+      const noControlRow = document.getElementById('noControlRow');
+      const durationRow = document.getElementById('durationRow');
+      const opinionSection = document.getElementById('opinionSection');
+
+      noControlRow.classList.toggle('hide', mode !== 'nocontrol');
+      durationRow.classList.toggle('hide', mode === 'nocontrol');
+      opinionSection.classList.toggle('hide', mode !== 'antibiais');
+
+      const challengeSection = document.getElementById('challengeSection');
+      const statsSection = document.getElementById('statsSection');
+      if (challengeSection) challengeSection.classList.toggle('hide', mode !== 'superior');
+      if (statsSection) statsSection.classList.toggle('hide', mode !== 'superior');
+      if (mode === 'superior') updateStatsDisplay();
+    }
+
+    function createPinkNoise(ctx) {
+      const bufferSize = 2048;
+      const node = ctx.createScriptProcessor(bufferSize, 1, 1);
+      let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+      node.onaudioprocess = e => {
+        try {
+          const output = e.outputBuffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            const white = Math.random() * 2 - 1;
+            b0 = 0.99886 * b0 + white * 0.0555179;
+            b1 = 0.99332 * b1 + white * 0.0750759;
+            b2 = 0.96900 * b2 + white * 0.1538520;
+            b3 = 0.86650 * b3 + white * 0.3104856;
+            b4 = 0.55000 * b4 + white * 0.5329522;
+            b5 = -0.7616 * b5 - white * 0.0168980;
+            output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+            output[i] *= 0.11;
+            b6 = white * 0.115926;
+          }
+        } catch (err) {
+          console.error('Pink noise processing error:', err);
+        }
+      };
+      return node;
+    }
+
+    function buildAudioGraph(beatFreq) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume().catch(err => console.error('Failed to resume audio context:', err));
+      }
+
+      leftOsc = audioCtx.createOscillator();
+      rightOsc = audioCtx.createOscillator();
+      leftOsc.type = 'sine';
+      rightOsc.type = 'sine';
+      leftOsc.frequency.value = baseFreq;
+      rightOsc.frequency.value = baseFreq + beatFreq;
+
+      leftDelay = audioCtx.createDelay(0.02);
+      rightDelay = audioCtx.createDelay(0.02);
+      leftDelay.delayTime.value = 0.002;
+      rightDelay.delayTime.value = 0.002;
+
+      leftPan = audioCtx.createStereoPanner();
+      rightPan = audioCtx.createStereoPanner();
+      leftPan.pan.value = -1;
+      rightPan.pan.value = 1;
+
+      noise = createPinkNoise(audioCtx);
+      masterGain = audioCtx.createGain();
+      masterGain.gain.value = currentVolume;
+
+      breathLfo = audioCtx.createOscillator();
+      breathLfo.type = 'sine';
+      breathLfo.frequency.value = 0.1;
+      breathDepth = audioCtx.createGain();
+      breathDepth.gain.value = currentVolume * 0.18;
+
+      leftOsc.connect(leftDelay).connect(leftPan).connect(masterGain);
+      rightOsc.connect(rightDelay).connect(rightPan).connect(masterGain);
+      noise.connect(masterGain);
+      breathLfo.connect(breathDepth).connect(masterGain.gain);
+      masterGain.connect(audioCtx.destination);
+
+      leftOsc.start();
+      rightOsc.start();
+      breathLfo.start();
+    }
+
+    function setBeatFrequency(beatFreq, glide = 1.5) {
+      if (!rightOsc || !audioCtx) return;
+      rightOsc.frequency.setTargetAtTime(baseFreq + beatFreq, audioCtx.currentTime, glide);
+    }
+
+    function scheduleMicroShift() {
+      clearTimeout(microShiftTimeout);
+      microShiftTimeout = setTimeout(() => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
+        const drift = randomBetween(-0.13, 0.13);
+        const nextBeat = Math.max(0.5, baseBeat + drift);
+        setBeatFrequency(nextBeat, 1.2);
+        leftDelay.delayTime.setTargetAtTime(randomBetween(0.0, 0.006), audioCtx.currentTime, 1.2);
+        rightDelay.delayTime.setTargetAtTime(randomBetween(0.0, 0.006), audioCtx.currentTime, 1.2);
+        scheduleMicroShift();
+      }, randomBetween(30, 60) * 1000);
+    }
+
+    function scheduleSilenceDip(depth) {
+      clearTimeout(silenceTimeout);
+      silenceTimeout = setTimeout(() => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
+        const now = audioCtx.currentTime;
+        const dipTarget = Math.max(0.02, currentVolume * (1 - depth));
+        masterGain.gain.cancelScheduledValues(now);
+        masterGain.gain.setTargetAtTime(dipTarget, now, 1.2);
+        masterGain.gain.setTargetAtTime(currentVolume, now + randomBetween(12, 20), 1.5);
+        pushMessage('Silenci actiu: deixa-ho passar.', 'hint');
+        scheduleSilenceDip(depth);
+      }, randomBetween(240, 420) * 1000);
+    }
+
+    function scheduleFrictionCues() {
+      messageTimeouts.forEach(id => clearTimeout(id));
+      messageTimeouts = [];
+      const pushTimeout = (fn, delay) => {
+        const id = setTimeout(fn, delay);
+        messageTimeouts.push(id);
+      };
+
+      pushTimeout(() => pushMessage('No intentis entendre el que ve.', 'system'), 180000);
+      pushTimeout(() => pushMessage("Genera 3 idees. Oblida'n una immediatament.", 'hint'), 270000);
+      pushTimeout(() => pushMessage("Ara canvia d'estrategia.", 'provoke'), 330000);
+
+      const contradictionDelay = randomBetween(240, 360) * 1000;
+      pushTimeout(() => {
+        pushMessage("Concentra't.", 'provoke');
+        pushTimeout(() => pushMessage("Deixa d'intentar-ho.", 'provoke'), 40000);
+      }, contradictionDelay);
+    }
+
+    function scheduleAntibiasFlow() {
+      const burstDelay = randomBetween(120, 180) * 1000;
+      const gammaDuration = randomBetween(30, 60);
+      const silenceDelay = burstDelay + gammaDuration * 1000;
+      const opinionInput = document.getElementById('opinionInput');
+
+      const burstId = setTimeout(() => {
+        baseBeat = 40;
+        setBeatFrequency(baseBeat, 0.6);
+        pushMessage('Gamma breu. Porta la teva opinio al limit.', 'provoke');
+      }, burstDelay);
+
+      const silenceId = setTimeout(() => {
+        pushMessage('Destrueix la teva opinio. Esborra-la ara.', 'provoke');
+        if (opinionInput) opinionInput.value = '';
+        const now = audioCtx.currentTime;
+        masterGain.gain.cancelScheduledValues(now);
+        masterGain.gain.setTargetAtTime(0.02, now, 1.2);
+      }, silenceDelay);
+
+      messageTimeouts.push(burstId, silenceId);
+    }
+
+    function scheduleClarityFlow() {
+      const intensity = document.getElementById('intensity').value;
+      const cp = clarityProfiles[intensity] || clarityProfiles.mid;
+      const totalSec = totalSessionSeconds;
+
+      // Phase 1: Alfa (primers 25%) — focus relaxat
+      baseBeat = cp.alphaHz;
+      setBeatFrequency(baseBeat, 2.0);
+      if (breathLfo && audioCtx) {
+        breathLfo.frequency.setTargetAtTime(cp.breathRate, audioCtx.currentTime, 1.0);
+      }
+      pushMessage('Fase Alfa: tanca els ulls, centra l\'atenció en la respiració.', 'system');
+
+      const phase2Start = Math.round(totalSec * 0.25);
+      const phase3Start = Math.round(totalSec * 0.50);
+      const phase4Start = Math.round(totalSec * 0.75);
+
+      // Phase 2: Beta — pensament actiu
+      const betaId = setTimeout(() => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
+        baseBeat = cp.betaHz;
+        setBeatFrequency(baseBeat, 1.5);
+        pushMessage('Fase Beta: pensament actiu. Visualitza un problema complex.', 'hint');
+      }, phase2Start * 1000);
+
+      // Exercise: pattern recognition
+      const exerciseId1 = setTimeout(() => {
+        pushMessage('Exercici: pensa en 3 coses que NO tenen res en comú... ara troba el fil invisible.', 'provoke');
+      }, (phase2Start + 45) * 1000);
+
+      // Phase 3: Gamma bursts — integració cognitiva
+      const gammaId = setTimeout(() => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
+        baseBeat = cp.gammaHz;
+        setBeatFrequency(baseBeat, 0.5);
+        pushMessage('Fase Gamma: integració neuronal. Deixa que les idees es connectin soles.', 'system');
+      }, phase3Start * 1000);
+
+      // Exercise: abstract thinking during gamma
+      const exerciseId2 = setTimeout(() => {
+        pushMessage('Exercici: si la teva ment fos un paisatge, quin seria ara?', 'hint');
+      }, (phase3Start + 30) * 1000);
+
+      // Micro-gamma pulses (3 brief 40Hz pulses during gamma phase)
+      for (let pulse = 1; pulse <= 3; pulse++) {
+        const pulseTime = phase3Start + pulse * Math.round(cp.gammaLen / 3);
+        const pulseId = setTimeout(() => {
+          if (!audioCtx || audioCtx.state === 'closed') return;
+          const now = audioCtx.currentTime;
+          // Brief volume surge for neural entrainment
+          masterGain.gain.setTargetAtTime(currentVolume * 1.15, now, 0.3);
+          masterGain.gain.setTargetAtTime(currentVolume, now + 2, 0.5);
+        }, pulseTime * 1000);
+        messageTimeouts.push(pulseId);
+      }
+
+      // End gamma, return to beta briefly
+      const endGammaId = setTimeout(() => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
+        baseBeat = cp.betaHz;
+        setBeatFrequency(baseBeat, 1.0);
+        pushMessage('Tornant a beta: consolida les connexions.', 'system');
+      }, (phase3Start + cp.gammaLen) * 1000);
+
+      // Phase 4: Alfa-theta — consolidació
+      const consolidateId = setTimeout(() => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
+        baseBeat = 8;
+        setBeatFrequency(baseBeat, 2.0);
+        if (breathLfo) {
+          breathLfo.frequency.setTargetAtTime(0.08, audioCtx.currentTime, 1.5);
+        }
+        pushMessage('Fase de consolidació: el cervell integra. No forçis res.', 'hint');
+      }, phase4Start * 1000);
+
+      // Final exercise: synthesis
+      const exerciseId3 = setTimeout(() => {
+        pushMessage('Exercici final: quina és la idea més clara que tens ara? Reté-la.', 'provoke');
+      }, (phase4Start + 30) * 1000);
+
+      // Periodic hemispheric sync shifts (subtle L/R phase changes)
+      const syncInterval = Math.round(totalSec / 8);
+      for (let i = 1; i <= 7; i++) {
+        const syncId = setTimeout(() => {
+          if (!leftDelay || !rightDelay || !audioCtx || audioCtx.state === 'closed') return;
+          leftDelay.delayTime.setTargetAtTime(randomBetween(0.001, 0.005), audioCtx.currentTime, 0.8);
+          rightDelay.delayTime.setTargetAtTime(randomBetween(0.001, 0.005), audioCtx.currentTime, 0.8);
+        }, i * syncInterval * 1000);
+        messageTimeouts.push(syncId);
+      }
+
+      messageTimeouts.push(betaId, exerciseId1, gammaId, exerciseId2, endGammaId, consolidateId, exerciseId3);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // MENT SUPERIOR — SESSION HISTORY (localStorage)
+    // ═══════════════════════════════════════════════════════════════
+    const STORAGE_KEY = 'neurofriction_superior_history';
+
+    function loadHistory() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : { sessions: [], currentLevel: 1, streak: 0, lastDate: null };
+      } catch { return { sessions: [], currentLevel: 1, streak: 0, lastDate: null }; }
+    }
+
+    function saveHistory(history) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(history)); } catch {}
+    }
+
+    function recordSession(score, durationMin) {
+      const history = loadHistory();
+      const today = new Date().toISOString().slice(0, 10);
+      history.sessions.push({ date: today, score, duration: durationMin, level: history.currentLevel });
+
+      // Streak calculation
+      const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+      if (history.lastDate === yesterday) {
+        history.streak++;
+      } else if (history.lastDate !== today) {
+        history.streak = 1;
+      }
+      history.lastDate = today;
+
+      // Level up: every 5 sessions or high scores
+      const levelThreshold = 6 + history.currentLevel * 2;
+      if (history.sessions.length % 5 === 0 || score >= levelThreshold) {
+        history.currentLevel = Math.min(10, history.currentLevel + 1);
+      }
+
+      saveHistory(history);
+      updateStatsDisplay();
+    }
+
+    function updateStatsDisplay() {
+      const history = loadHistory();
+      const el = (id) => document.getElementById(id);
+      if (el('statSessions')) el('statSessions').innerText = history.sessions.length;
+      if (el('statStreak')) el('statStreak').innerText = history.streak;
+      if (el('statLevel')) el('statLevel').innerText = history.currentLevel;
+      const best = history.sessions.reduce((max, s) => Math.max(max, s.score || 0), 0);
+      if (el('statBestScore')) el('statBestScore').innerText = best;
+      if (el('challengeLevel')) el('challengeLevel').innerText = history.currentLevel;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // MENT SUPERIOR — CHALLENGE ENGINE
+    // ═══════════════════════════════════════════════════════════════
+    let challengeTimer = null;
+    let currentChallengeScore = 0;
+    let currentChallengeStreak = 0;
+    let challengeActive = false;
+
+    const challengeBank = [
+      // ── Associacions remotes ──
+      { type: 'associació', q: 'Quina paraula connecta: LLUM, VELOCITAT, ANY?', answer: 'Llum', options: ['Llum', 'Temps', 'Espai', 'Energia'], level: 1 },
+      { type: 'associació', q: 'Quina paraula connecta: FERRO, VOLUNTAT, CARÀCTER?', answer: 'Fort', options: ['Fort', 'Dur', 'Rígid', 'Metall'], level: 1 },
+      { type: 'associació', q: 'Quina paraula connecta: CAMP, MAGNÈTIC, ELÈCTRIC?', answer: 'Camp', options: ['Camp', 'Força', 'Ona', 'Pol'], level: 1 },
+      { type: 'associació', q: 'Quina paraula connecta: NEGRA, ESTRELLES, FORAT?', answer: 'Nit', options: ['Nit', 'Espai', 'Fosc', 'Univers'], level: 1 },
+      { type: 'associació', q: 'Quina paraula connecta: CADENA, MUNTANYA, ALIMENTÀRIA?', answer: 'Cadena', options: ['Cadena', 'Natura', 'Cicle', 'Roca'], level: 2 },
+      { type: 'associació', q: 'Connecta: PUNT, MORT, CEGO?', answer: 'Punt', options: ['Punt', 'Final', 'Vista', 'Fosc'], level: 2 },
+
+      // ── Càlcul mental ──
+      { type: 'càlcul', q: '47 + 38 = ?', answer: '85', options: ['85', '83', '87', '75'], level: 1 },
+      { type: 'càlcul', q: '96 - 37 = ?', answer: '59', options: ['59', '57', '63', '61'], level: 1 },
+      { type: 'càlcul', q: '13 × 7 = ?', answer: '91', options: ['91', '87', '93', '89'], level: 1 },
+      { type: 'càlcul', q: '144 ÷ 12 = ?', answer: '12', options: ['12', '14', '11', '13'], level: 1 },
+      { type: 'càlcul', q: '23 × 17 = ?', answer: '391', options: ['391', '381', '401', '371'], level: 2 },
+      { type: 'càlcul', q: '√169 = ?', answer: '13', options: ['13', '11', '12', '14'], level: 2 },
+      { type: 'càlcul', q: '17² = ?', answer: '289', options: ['289', '279', '299', '269'], level: 3 },
+      { type: 'càlcul', q: '7 × 8 + 13 = ?', answer: '69', options: ['69', '67', '71', '63'], level: 2 },
+      { type: 'càlcul', q: '256 + 189 = ?', answer: '445', options: ['445', '435', '455', '425'], level: 2 },
+      { type: 'càlcul', q: '1024 ÷ 16 = ?', answer: '64', options: ['64', '62', '68', '56'], level: 3 },
+
+      // ── Patrons / Seqüències ──
+      { type: 'patró', q: '2, 6, 18, 54, ?', answer: '162', options: ['162', '108', '156', '180'], level: 1 },
+      { type: 'patró', q: '1, 1, 2, 3, 5, 8, ?', answer: '13', options: ['13', '11', '10', '14'], level: 1 },
+      { type: 'patró', q: '1, 4, 9, 16, 25, ?', answer: '36', options: ['36', '30', '49', '32'], level: 1 },
+      { type: 'patró', q: '3, 7, 15, 31, ?', answer: '63', options: ['63', '47', '62', '59'], level: 2 },
+      { type: 'patró', q: '2, 3, 5, 7, 11, 13, ?', answer: '17', options: ['17', '15', '19', '14'], level: 2 },
+      { type: 'patró', q: '1, 3, 6, 10, 15, ?', answer: '21', options: ['21', '18', '20', '25'], level: 2 },
+      { type: 'patró', q: '0, 1, 1, 2, 3, 5, 8, 13, ?', answer: '21', options: ['21', '18', '20', '26'], level: 3 },
+
+      // ── Memòria de treball ──
+      { type: 'memòria', q: 'Seqüència: F - K - R - M. Quina era la 2a lletra?', answer: 'K', options: ['K', 'F', 'R', 'M'], level: 1 },
+      { type: 'memòria', q: 'Seqüència: 7 - 3 - 9 - 2 - 5. Quin era el 3r número?', answer: '9', options: ['9', '3', '7', '2'], level: 2 },
+      { type: 'memòria', q: 'BLAU - VERD - ROIG - GROC. Inverteix: quin és el 2n?', answer: 'ROIG', options: ['ROIG', 'GROC', 'VERD', 'BLAU'], level: 2 },
+      { type: 'memòria', q: '8 - 1 - 6 - 4 - 9 - 2. Suma el 1r i l\'últim.', answer: '10', options: ['10', '11', '9', '12'], level: 3 },
+      { type: 'memòria', q: 'P - T - M - B - S. Quina lletra va entre M i S?', answer: 'B', options: ['B', 'T', 'P', 'S'], level: 2 },
+
+      // ── Lògica / Raonament abstracte ──
+      { type: 'lògica', q: 'Si A > B i B > C, llavors...', answer: 'A > C', options: ['A > C', 'C > A', 'A = C', 'Impossible saber'], level: 1 },
+      { type: 'lògica', q: 'Tots els X són Y. Algun Z és X. Per tant...', answer: 'Algun Z és Y', options: ['Algun Z és Y', 'Tot Z és Y', 'Cap Z és Y', 'Impossible'], level: 2 },
+      { type: 'lògica', q: 'Si plou → carrer mullat. Carrer mullat. Per tant...', answer: 'No es pot concloure', options: ['No es pot concloure', 'Ha plogut', 'No ha plogut', 'Plourà'], level: 2 },
+      { type: 'lògica', q: 'Cap peix no vola. Tot salmó és peix. Per tant...', answer: 'Cap salmó vola', options: ['Cap salmó vola', 'Algun salmó vola', 'No se sap', 'Depèn'], level: 2 },
+      { type: 'lògica', q: 'Si ¬P → Q, i ¬Q. Per tant...', answer: 'P', options: ['P', '¬P', 'Q', 'Impossible'], level: 3 },
+
+      // ── Verbal / Intrús ──
+      { type: 'verbal', q: 'Intrús: Taronja, Poma, Pastanaga, Préssec?', answer: 'Pastanaga', options: ['Pastanaga', 'Taronja', 'Poma', 'Préssec'], level: 1 },
+      { type: 'verbal', q: 'Intrús: Piano, Violí, Trompeta, Guitarra?', answer: 'Trompeta', options: ['Trompeta', 'Piano', 'Violí', 'Guitarra'], level: 1 },
+      { type: 'verbal', q: 'Intrús: Mercuri, Venus, Lluna, Mart?', answer: 'Lluna', options: ['Lluna', 'Mercuri', 'Venus', 'Mart'], level: 1 },
+      { type: 'verbal', q: 'CASA : HABITANT :: GÀBIA : ?', answer: 'Ocell', options: ['Ocell', 'Ferro', 'Porta', 'Zoo'], level: 1 },
+      { type: 'verbal', q: 'LLIBRE : PÀGINA :: ARBRE : ?', answer: 'Fulla', options: ['Fulla', 'Tronc', 'Bosc', 'Arrel'], level: 2 },
+      { type: 'verbal', q: 'Intrús: Oxigen, Hidrogen, Aigua, Nitrogen?', answer: 'Aigua', options: ['Aigua', 'Oxigen', 'Hidrogen', 'Nitrogen'], level: 2 },
+
+      // ── Espacial / Rotació mental ──
+      { type: 'espacial', q: '◁ gira 180°. Què veus?', answer: '▷', options: ['▷', '△', '▽', '◁'], level: 1 },
+      { type: 'espacial', q: '↑ gira 90° sentit horari. Resultat?', answer: '→', options: ['→', '←', '↓', '↑'], level: 1 },
+      { type: 'espacial', q: '→ gira 270° sentit horari. Resultat?', answer: '↑', options: ['↑', '↓', '←', '→'], level: 2 },
+      { type: 'espacial', q: '△ reflectit horitzontalment. Resultat?', answer: '△', options: ['△', '▽', '◁', '▷'], level: 2 },
+    ];
+
+    function getAvailableChallenges() {
+      const history = loadHistory();
+      const level = history.currentLevel || 1;
+      return challengeBank.filter(c => !c.level || c.level <= level);
+    }
+
+    function shuffleArray(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function presentChallenge() {
+      if (!challengeActive || !sessionActive) return;
+      const available = getAvailableChallenges();
+      const challenge = available[Math.floor(Math.random() * available.length)];
+      const qEl = document.getElementById('challengeQ');
+      const optsEl = document.getElementById('challengeOpts');
+
+      qEl.textContent = `[${challenge.type}] ${challenge.q}`;
+      optsEl.innerHTML = '';
+
+      const shuffled = shuffleArray(challenge.options);
+      shuffled.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'challenge-option';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => handleChallengeAnswer(btn, opt, challenge.answer, optsEl));
+        optsEl.appendChild(btn);
+      });
+
+      document.getElementById('challengePanel').classList.add('active');
+    }
+
+    function handleChallengeAnswer(btn, selected, correct, container) {
+      container.querySelectorAll('.challenge-option').forEach(b => {
+        b.disabled = true;
+        if (b.textContent === correct) b.classList.add('correct');
+      });
+
+      if (selected === correct) {
+        currentChallengeScore++;
+        currentChallengeStreak++;
+        pushMessage(`✓ Correcte! Punts: ${currentChallengeScore} · Ratxa: ${currentChallengeStreak}`, 'system');
+      } else {
+        btn.classList.add('wrong');
+        currentChallengeStreak = 0;
+        pushMessage(`✗ Incorrecte. Resposta: ${correct}`, 'provoke');
+      }
+
+      document.getElementById('challengeScore').innerText = currentChallengeScore;
+      document.getElementById('challengeStreak').innerText = currentChallengeStreak;
+
+      clearTimeout(challengeTimer);
+      challengeTimer = setTimeout(() => {
+        if (challengeActive && sessionActive) presentChallenge();
+      }, 4500);
+    }
+
+    function startChallengeEngine() {
+      challengeActive = true;
+      currentChallengeScore = 0;
+      currentChallengeStreak = 0;
+      document.getElementById('challengeScore').innerText = '0';
+      document.getElementById('challengeStreak').innerText = '0';
+    }
+
+    function stopChallengeEngine() {
+      challengeActive = false;
+      clearTimeout(challengeTimer);
+      const cp = document.getElementById('challengePanel');
+      if (cp) cp.classList.remove('active');
+    }
+
+    function updatePhaseBadge(phase) {
+      const badge = document.getElementById('phaseBadge');
+      if (!badge) return;
+      const phases = {
+        alpha: { text: 'α ALFA · 10 Hz', cls: 'phase-alpha' },
+        beta:  { text: 'β BETA · 16 Hz', cls: 'phase-beta' },
+        gamma: { text: 'γ GAMMA · 40 Hz', cls: 'phase-gamma' },
+        theta: { text: 'θ THETA · 6 Hz', cls: 'phase-theta' },
+        tgc:   { text: 'θγ COUPLING · 6+40 Hz', cls: 'phase-gamma' }
+      };
+      const p = phases[phase] || phases.alpha;
+      badge.className = `phase-badge ${p.cls}`;
+      badge.textContent = p.text;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // MENT SUPERIOR — THETA-GAMMA COUPLING (cross-frequency)
+    // ═══════════════════════════════════════════════════════════════
+    let tgcThetaOsc = null;
+    let tgcThetaDepth = null;
+    let tgcGammaL = null;
+    let tgcGammaR = null;
+    let tgcGammaGain = null;
+
+    function buildThetaGammaCoupling(thetaHz, gammaHz) {
+      if (!audioCtx || audioCtx.state === 'closed') return;
+
+      // Gamma binaural pair at higher carrier
+      tgcGammaL = audioCtx.createOscillator();
+      tgcGammaR = audioCtx.createOscillator();
+      tgcGammaL.type = 'sine';
+      tgcGammaR.type = 'sine';
+      tgcGammaL.frequency.value = baseFreq * 1.5;
+      tgcGammaR.frequency.value = baseFreq * 1.5 + gammaHz;
+
+      // Gain node for gamma (amplitude modulated by theta)
+      tgcGammaGain = audioCtx.createGain();
+      tgcGammaGain.gain.value = 0; // Silent until activated
+
+      // Theta LFO modulates gamma amplitude → cross-frequency nesting
+      tgcThetaOsc = audioCtx.createOscillator();
+      tgcThetaOsc.type = 'sine';
+      tgcThetaOsc.frequency.value = thetaHz;
+
+      tgcThetaDepth = audioCtx.createGain();
+      tgcThetaDepth.gain.value = 0; // Start at 0
+
+      // Pan gamma binaurally
+      const gPanL = audioCtx.createStereoPanner();
+      const gPanR = audioCtx.createStereoPanner();
+      gPanL.pan.value = -1;
+      gPanR.pan.value = 1;
+
+      tgcGammaL.connect(gPanL).connect(tgcGammaGain);
+      tgcGammaR.connect(gPanR).connect(tgcGammaGain);
+      tgcThetaOsc.connect(tgcThetaDepth).connect(tgcGammaGain.gain);
+      tgcGammaGain.connect(masterGain);
+
+      tgcGammaL.start();
+      tgcGammaR.start();
+      tgcThetaOsc.start();
+    }
+
+    function activateTGC(depth, rampTime) {
+      if (!tgcThetaDepth || !tgcGammaGain || !audioCtx) return;
+      const now = audioCtx.currentTime;
+      tgcThetaDepth.gain.setTargetAtTime(depth, now, rampTime);
+      tgcGammaGain.gain.setTargetAtTime(currentVolume * 0.35, now, rampTime);
+    }
+
+    function deactivateTGC(rampTime) {
+      if (!tgcThetaDepth || !tgcGammaGain || !audioCtx) return;
+      const now = audioCtx.currentTime;
+      tgcThetaDepth.gain.setTargetAtTime(0, now, rampTime);
+      tgcGammaGain.gain.setTargetAtTime(0, now, rampTime);
+    }
+
+    function cleanupTGC() {
+      try { if (tgcGammaL) tgcGammaL.stop(); } catch {}
+      try { if (tgcGammaR) tgcGammaR.stop(); } catch {}
+      try { if (tgcThetaOsc) tgcThetaOsc.stop(); } catch {}
+      tgcGammaL = null;
+      tgcGammaR = null;
+      tgcGammaGain = null;
+      tgcThetaOsc = null;
+      tgcThetaDepth = null;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // MENT SUPERIOR — PROTOCOL SCHEDULER
+    // ═══════════════════════════════════════════════════════════════
+    function scheduleSuperiorFlow() {
+      const history = loadHistory();
+      const level = history.currentLevel || 1;
+      const totalSec = totalSessionSeconds;
+
+      // Build theta-gamma coupling infrastructure
+      buildThetaGammaCoupling(6, 40);
+
+      // Start challenges
+      startChallengeEngine();
+
+      // Phase boundaries (6 phases)
+      const p2 = Math.round(totalSec * 0.12);  // beta starts
+      const p3 = Math.round(totalSec * 0.30);  // gamma starts
+      const p4 = Math.round(totalSec * 0.48);  // TGC starts (the KEY phase)
+      const p5 = Math.round(totalSec * 0.72);  // consolidation
+      const p6 = Math.round(totalSec * 0.87);  // deep theta
+
+      // ─── PHASE 1: ALFA CALM (0–12%) ───
+      baseBeat = 10;
+      setBeatFrequency(baseBeat, 2.0);
+      updatePhaseBadge('alpha');
+      pushMessage('Fase 1 · Alfa: calibrant la teva línia base. Respira.', 'system');
+
+      // First challenge after settling
+      const firstId = setTimeout(() => {
+        if (!sessionActive) return;
+        if (workMode) {
+          pushMessage('Mode Feina: la teva feina és l\'entrenament. Concentra\'t en el que fas.', 'hint');
+        } else {
+          pushMessage('Primer repte — mantén la calma.', 'hint');
+          presentChallenge();
+        }
+      }, Math.min(45, p2 - 5) * 1000);
+
+      // ─── PHASE 2: BETA ACTIU (12–30%) ───
+      const betaHz = 14 + Math.min(level, 5) * 0.8;
+      const betaId = setTimeout(() => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
+        baseBeat = betaHz;
+        setBeatFrequency(baseBeat, 1.3);
+        updatePhaseBadge('beta');
+        pushMessage(`Fase 2 · Beta (${betaHz.toFixed(1)} Hz): pensament ràpid. Resol.`, 'hint');
+        if (!workMode) presentChallenge();
+      }, p2 * 1000);
+
+      // Challenges during beta (20-28s intervals)
+      const betaIds = [];
+      for (let t = p2 + 22; t < p3 - 8; t += Math.round(randomBetween(18, 28))) {
+        const id = setTimeout(() => {
+          if (sessionActive && challengeActive && !workMode) presentChallenge();
+        }, t * 1000);
+        betaIds.push(id);
+      }
+
+      // ─── PHASE 3: GAMMA PUR (30–48%) ───
+      const gammaId = setTimeout(() => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
+        baseBeat = 40;
+        setBeatFrequency(baseBeat, 0.5);
+        updatePhaseBadge('gamma');
+        pushMessage('Fase 3 · Gamma pur: integració neuronal. Tot es connecta.', 'system');
+        if (!workMode) presentChallenge();
+      }, p3 * 1000);
+
+      // Faster challenges during gamma (12-20s)
+      const gammaIds = [];
+      for (let t = p3 + 15; t < p4 - 8; t += Math.round(randomBetween(12, 20))) {
+        const id = setTimeout(() => {
+          if (sessionActive && challengeActive && !workMode) presentChallenge();
+        }, t * 1000);
+        gammaIds.push(id);
+      }
+
+      // Volume pulses during gamma (neural entrainment)
+      const pulseIds = [];
+      for (let t = p3 + 10; t < p4; t += Math.round(randomBetween(15, 25))) {
+        const id = setTimeout(() => {
+          if (!audioCtx || audioCtx.state === 'closed') return;
+          const now = audioCtx.currentTime;
+          masterGain.gain.setTargetAtTime(currentVolume * 1.12, now, 0.3);
+          masterGain.gain.setTargetAtTime(currentVolume, now + 1.5, 0.5);
+        }, t * 1000);
+        pulseIds.push(id);
+      }
+
+      // ─── PHASE 4: THETA-GAMMA COUPLING (48–72%) — LA CLAU ───
+      const tgcId = setTimeout(() => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
+        baseBeat = 6; // Theta base
+        setBeatFrequency(baseBeat, 1.5);
+        activateTGC(currentVolume * 0.25, 2.0);
+        updatePhaseBadge('tgc');
+        pushMessage('═══ Fase 4 · THETA-GAMMA COUPLING ═══', 'system');
+        if (workMode) {
+          pushMessage('Coupling actiu. Segueix treballant — el cervell integra en segon pla.', 'system');
+        } else {
+          pushMessage('Gamma niuat dins theta. Això és el que fan els cervells superiors: cross-frequency coupling.', 'system');
+          pushMessage('Deixa la ment navegar. No forçis — observa.', 'hint');
+        }
+      }, p4 * 1000);
+
+      // Work mode: subtle phase notifications only (non-distracting)
+      if (workMode) {
+        const workHints = [
+          { t: Math.round(totalSec * 0.35), msg: 'Gamma actiu: bon moment per als càlculs més complexos.', tone: 'hint' },
+          { t: Math.round(totalSec * 0.55), msg: 'Theta-gamma coupling: el teu cervell està en estat de màxima integració.', tone: 'system' },
+          { t: Math.round(totalSec * 0.80), msg: 'Consolidació: si tens una decisió pendent, ara la veuràs més clara.', tone: 'hint' }
+        ];
+        workHints.forEach(h => {
+          const id = setTimeout(() => {
+            if (sessionActive) pushMessage(h.msg, h.tone);
+          }, h.t * 1000);
+          messageTimeouts.push(id);
+        });
+      }
+
+      // Slower, more abstract challenges during TGC (25-40s)
+      const tgcCIds = [];
+      for (let t = p4 + 30; t < p5 - 15; t += Math.round(randomBetween(25, 40))) {
+        const id = setTimeout(() => {
+          if (sessionActive && challengeActive && !workMode) presentChallenge();
+        }, t * 1000);
+        tgcCIds.push(id);
+      }
+
+      // Pulsing TGC depth (natural oscillation)
+      const tgcPulseIds = [];
+      for (let t = p4 + 12; t < p5; t += Math.round(randomBetween(12, 22))) {
+        const id = setTimeout(() => {
+          if (!audioCtx || audioCtx.state === 'closed') return;
+          const depth = randomBetween(0.15, 0.4) * currentVolume;
+          activateTGC(depth, 0.8);
+        }, t * 1000);
+        tgcPulseIds.push(id);
+      }
+
+      // Hemispheric phase shifts during TGC
+      const tgcSyncIds = [];
+      for (let t = p4 + 20; t < p5; t += Math.round(randomBetween(18, 30))) {
+        const id = setTimeout(() => {
+          if (!leftDelay || !rightDelay || !audioCtx || audioCtx.state === 'closed') return;
+          leftDelay.delayTime.setTargetAtTime(randomBetween(0.0005, 0.005), audioCtx.currentTime, 0.6);
+          rightDelay.delayTime.setTargetAtTime(randomBetween(0.0005, 0.005), audioCtx.currentTime, 0.6);
+        }, t * 1000);
+        tgcSyncIds.push(id);
+      }
+
+      // ─── PHASE 5: ALFA ALTA — CONSOLIDACIÓ (72–87%) ───
+      const consId = setTimeout(() => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
+        deactivateTGC(2.0);
+        baseBeat = 11; // Elevated alpha (individual alpha frequency training)
+        setBeatFrequency(baseBeat, 2.0);
+        updatePhaseBadge('alpha');
+        pushMessage('Fase 5 · Alfa alta: consolidació. El cervell integra les connexions.', 'hint');
+        // Last round of challenges
+        if (!workMode) presentChallenge();
+      }, p5 * 1000);
+
+      const consIds = [];
+      for (let t = p5 + 20; t < p6 - 10; t += Math.round(randomBetween(20, 35))) {
+        const id = setTimeout(() => {
+          if (sessionActive && challengeActive && !workMode) presentChallenge();
+        }, t * 1000);
+        consIds.push(id);
+      }
+
+      // ─── PHASE 6: THETA PROFUND — TANCAMENT (87–100%) ───
+      const deepId = setTimeout(() => {
+        if (!audioCtx || audioCtx.state === 'closed') return;
+        deactivateTGC(1.5);
+        baseBeat = 5;
+        setBeatFrequency(baseBeat, 2.5);
+        updatePhaseBadge('theta');
+        stopChallengeEngine();
+        if (breathLfo) {
+          breathLfo.frequency.setTargetAtTime(0.07, audioCtx.currentTime, 1.5);
+        }
+        pushMessage('Fase final · Theta profund: zero reptes. Totes les connexions es consoliden en silenci.', 'system');
+        if (workMode) {
+          pushMessage('Sessió de feina completada. Les freqüències han acompanyat el teu treball.', 'hint');
+        } else {
+          pushMessage(`Sessió completada. Puntuació: ${currentChallengeScore} encerts.`, 'hint');
+        }
+      }, p6 * 1000);
+
+      messageTimeouts.push(
+        firstId, betaId, gammaId, tgcId, consId, deepId,
+        ...betaIds, ...gammaIds, ...pulseIds,
+        ...tgcCIds, ...tgcPulseIds, ...tgcSyncIds, ...consIds
+      );
+    }
+
+    function scheduleInsightFlow() {
+      const gammaDuration = Math.round(randomBetween(30, 60));
+      pushMessage('Repte absurd: connecta dues coses llunyanes.', 'hint');
+      const gammaId = setTimeout(() => {
+        baseBeat = 40;
+        setBeatFrequency(baseBeat, 0.7);
+      }, 3000);
+      const thetaId = setTimeout(() => {
+        baseBeat = 6;
+        setBeatFrequency(baseBeat, 1.8);
+        pushMessage('Ara deixa que el theta faci el seu treball.', 'system');
+      }, gammaDuration * 1000);
+      messageTimeouts.push(gammaId, thetaId);
+    }
+
+    function updateTimer() {
+      if (!showTimer) return;
+      const m = Math.floor(remainingSessionSeconds / 60);
+      const s = remainingSessionSeconds % 60;
+      document.getElementById('timer').innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+      if (totalSessionSeconds > 0) {
+        const progress = ((totalSessionSeconds - remainingSessionSeconds) / totalSessionSeconds) * 100;
+        document.getElementById('progressBar').style.width = `${Math.min(100, Math.max(0, progress))}%`;
+      }
+    }
+
+    function setSessionButtons(running, paused) {
+      const startBtn = document.getElementById('startBtn');
+      const pauseBtn = document.getElementById('pauseBtn');
+      const resumeBtn = document.getElementById('resumeBtn');
+      const stopBtn = document.getElementById('stopBtn');
+
+      if (!running) {
+        startBtn.disabled = false;
+        pauseBtn.disabled = true;
+        resumeBtn.disabled = true;
+        stopBtn.disabled = true;
+        return;
+      }
+
+      startBtn.disabled = true;
+      stopBtn.disabled = false;
+      pauseBtn.disabled = paused || !allowPause;
+      resumeBtn.disabled = !paused || !allowPause;
+    }
+
+    function startTimerInterval() {
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (!sessionActive) return;
+        remainingSessionSeconds--;
+        updateTimer();
+        if (remainingSessionSeconds <= 0) {
+          stopSession(false);
+        }
+      }, 1000);
+    }
+
+    function startSession() {
+      if (sessionActive) {
+        stopSession(true);
+      }
+
+      const intensity = document.getElementById('intensity').value;
+      const profile = intensityProfiles[intensity] || intensityProfiles.mid;
+      baseBeat = profile.beat;
+
+      if (selectedMode === 'antibiais') {
+        const opinion = document.getElementById('opinionInput').value.trim();
+        if (!opinion) {
+          alert('Escriu una opinio abans d entrar en Antibiais Brutal.');
+          return;
+        }
+      }
+
+      const durationInput = parseInt(document.getElementById('duration').value, 10);
+      const minDuration = parseInt(document.getElementById('minDuration').value, 10);
+      const maxDuration = parseInt(document.getElementById('maxDuration').value, 10);
+      let minutes = durationInput;
+
+      if (selectedMode === 'nocontrol') {
+        const safeMin = Math.min(minDuration, maxDuration);
+        const safeMax = Math.max(minDuration, maxDuration);
+        minutes = Math.round(randomBetween(safeMin, safeMax));
+      }
+
+      showTimer = selectedMode !== 'nocontrol';
+      allowPause = selectedMode !== 'nocontrol';
+
+      document.getElementById('progressWrap').classList.toggle('hide', !showTimer);
+      document.getElementById('timer').classList.toggle('hide', !showTimer);
+
+      totalSessionSeconds = minutes * 60;
+      remainingSessionSeconds = totalSessionSeconds;
+
+      sessionActive = true;
+      isPaused = false;
+
+      clearFeed();
+      clearReport();
+      buildAudioGraph(baseBeat);
+      setStatus('Sistema calibrant...');
+      pushMessage('Entrada. El sistema t esta llegint.', 'system');
+
+      scheduleMicroShift();
+      scheduleSilenceDip(profile.dipDepth);
+      scheduleFrictionCues();
+
+      if (selectedMode === 'antibiais') {
+        scheduleAntibiasFlow();
+      }
+      if (selectedMode === 'insight') {
+        scheduleInsightFlow();
+      }
+      if (selectedMode === 'claredat') {
+        scheduleClarityFlow();
+      }
+      if (selectedMode === 'superior') {
+        scheduleSuperiorFlow();
+      }
+
+      updateTimer();
+      setSessionButtons(true, false);
+      startTimerInterval();
+      setStatus('Sessio viva en curs.');
+    }
+
+    function pauseSession() {
+      if (!audioCtx || isPaused || !allowPause) return;
+      isPaused = true;
+      clearInterval(timerInterval);
+      if (audioCtx.state === 'running') {
+        audioCtx.suspend().catch(err => console.error('Failed to suspend audio context:', err));
+      }
+      setStatus('Sessio en pausa.');
+      setSessionButtons(true, true);
+    }
+
+    function resumeSession() {
+      if (!audioCtx || !isPaused || !allowPause) return;
+      isPaused = false;
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume().catch(err => console.error('Failed to resume audio context:', err));
+      }
+      setStatus('Sessio reactivada.');
+      setSessionButtons(true, false);
+      startTimerInterval();
+    }
+
+    function stopSession(isRestart = false) {
+      clearInterval(timerInterval);
+      clearTimeout(microShiftTimeout);
+      clearTimeout(silenceTimeout);
+      messageTimeouts.forEach(id => clearTimeout(id));
+      messageTimeouts = [];
+
+      cleanupTGC();
+      stopChallengeEngine();
+
+      if (leftOsc) leftOsc.stop();
+      if (rightOsc) rightOsc.stop();
+      if (breathLfo) breathLfo.stop();
+      if (audioCtx) audioCtx.close();
+
+      audioCtx = null;
+      leftOsc = null;
+      rightOsc = null;
+      noise = null;
+      masterGain = null;
+      breathLfo = null;
+      breathDepth = null;
+      leftDelay = null;
+      rightDelay = null;
+      leftPan = null;
+      rightPan = null;
+      sessionActive = false;
+      isPaused = false;
+
+      setSessionButtons(false, false);
+
+      if (!isRestart) {
+        if (selectedMode === 'superior') {
+          recordSession(currentChallengeScore, Math.round(totalSessionSeconds / 60));
+          updatePhaseBadge('alpha');
+          document.getElementById('phaseBadge').textContent = 'COMPLETAT';
+        }
+        setStatus('Sessio finalitzada.');
+        generateReport();
+        startRitualCountdown();
+      }
+    }
+
+    function generateReport() {
+      const rating = parseInt(document.getElementById('selfRating').value, 10);
+      const lines = [];
+      const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+      lines.push(pick(reportSeeds.resilience));
+      lines.push(pick(reportSeeds.clarity));
+      lines.push(pick(reportSeeds.transitions));
+
+      if (rating <= 2) {
+        lines[0] = 'La friccio ha estat massa intensa avui.';
+      }
+      if (selectedMode === 'nocontrol') {
+        lines[2] = 'La rendicio cognitiva ha deixat espai a la claredat.';
+      }
+      if (selectedMode === 'claredat') {
+        lines[0] = pick(reportSeeds.intelligence);
+        lines[2] = 'La progressió alfa→beta→gamma ha activat noves connexions.';
+      }
+      if (selectedMode === 'superior') {
+        lines[0] = pick(reportSeeds.superior);
+        lines[1] = `Puntuació cognitiva: ${currentChallengeScore} encerts.`;
+        lines[2] = 'El theta-gamma coupling ha simulat l\'arquitectura dels cervells d\'alt rendiment.';
+      }
+
+      const reportList = document.getElementById('reportList');
+      reportList.innerHTML = '';
+      lines.forEach(line => {
+        const item = document.createElement('div');
+        item.textContent = line;
+        reportList.appendChild(item);
+      });
+
+      document.getElementById('reportKey').innerText = pick(reportSeeds.keys);
+      document.getElementById('reportPanel').classList.add('active');
+    }
+
+    function startRitualCountdown() {
+      const overlay = document.getElementById('ritualOverlay');
+      const countdown = document.getElementById('ritualCountdown');
+      const closeBtn = document.getElementById('ritualClose');
+      let remaining = 30;
+
+      overlay.classList.add('active');
+      overlay.setAttribute('aria-hidden', 'false');
+      closeBtn.disabled = true;
+      countdown.innerText = remaining;
+
+      clearInterval(ritualInterval);
+      ritualInterval = setInterval(() => {
+        remaining -= 1;
+        countdown.innerText = remaining;
+        if (remaining <= 0) {
+          clearInterval(ritualInterval);
+          closeBtn.disabled = false;
+        }
+      }, 1000);
+    }
+
+    document.getElementById('ritualClose').addEventListener('click', () => {
+      const overlay = document.getElementById('ritualOverlay');
+      overlay.classList.remove('active');
+      overlay.setAttribute('aria-hidden', 'true');
+    });
+
+    document.querySelectorAll('.mode-card').forEach(btn => {
+      btn.addEventListener('click', () => setMode(btn.dataset.mode));
+    });
+
+    document.getElementById('volume').addEventListener('input', (event) => {
+      setVolume(parseFloat(event.target.value));
+    });
+
+    document.getElementById('selfRating').addEventListener('input', (event) => {
+      document.getElementById('ratingValue').innerText = `${event.target.value}/5`;
+    });
+
+    document.getElementById('startBtn').addEventListener('click', startSession);
+    document.getElementById('pauseBtn').addEventListener('click', pauseSession);
+    document.getElementById('resumeBtn').addEventListener('click', resumeSession);
+    document.getElementById('stopBtn').addEventListener('click', () => stopSession(false));
+
+    document.getElementById('workModeToggle').addEventListener('change', (event) => {
+      workMode = event.target.checked;
+      const cpanel = document.getElementById('challengePanel');
+      if (cpanel) cpanel.classList.toggle('hide', workMode);
+      const scoreRow = document.querySelector('.challenge-score');
+      if (scoreRow) scoreRow.style.display = workMode ? 'none' : '';
+    });
+
+    setMode('viva');
+    setVolume(currentVolume);
+    setStatus('Entrada en espera.');
+    updateStatsDisplay();
+  </script>
+</body>
+</html>
